@@ -12,21 +12,20 @@ public enum Action {
     READ("read"),
     WRITE("write");
 
-    private final String canonicalName;
-
     private static final Map<String, Action> NAME_MAP = Arrays.stream(values())
             .collect(Collectors.toUnmodifiableMap(
                     Action::canonicalName,
                     Function.identity()
             ));
-
-    public String canonicalName() {
-        return canonicalName;
-    }
+    private final String canonicalName;
 
     public static Action from(String canonicalName) {
         var action = NAME_MAP.get(canonicalName);
         if (action == null) throw new IllegalArgumentException("Unknown action canonical name. name=" + canonicalName);
         return action;
+    }
+
+    public String canonicalName() {
+        return canonicalName;
     }
 }

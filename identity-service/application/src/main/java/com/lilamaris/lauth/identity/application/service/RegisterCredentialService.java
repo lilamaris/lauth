@@ -7,7 +7,6 @@ import com.lilamaris.lauth.identity.application.port.in.RegisterCredentialUseCas
 import com.lilamaris.lauth.identity.application.port.in.command.RegisterCredentialCommand;
 import com.lilamaris.lauth.identity.application.port.out.CredentialReader;
 import com.lilamaris.lauth.identity.application.port.out.CredentialStore;
-import com.lilamaris.lauth.identity.application.port.out.UserStore;
 import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;

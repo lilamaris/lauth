@@ -5,8 +5,6 @@ import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
 import com.lilamaris.lauth.identity.domain.scope.Action;
 import com.lilamaris.lauth.identity.domain.scope.Scope;
 
-import java.util.UUID;
-
 public record ResourceScope(
         String resource,
         Action action
