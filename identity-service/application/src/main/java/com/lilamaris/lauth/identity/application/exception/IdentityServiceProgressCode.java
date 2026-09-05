@@ -8,9 +8,10 @@ import lombok.RequiredArgsConstructor;
 public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     USER_NOT_FOUND(ProcessReason.REJECTED, "user", "not-found", "사용자를 찾을 수 없습니다."),
     CREDENTIAL_NOT_FOUND(ProcessReason.REJECTED, "credential", "not-found", "계정을 찾을 수 없습니다."),
-
     EMAIL_DUPLICATED(ProcessReason.REJECTED, "credential", "duplicated", "이미 사용 중인 이메일입니다."),
-    AUTHENTICATION_FAILED(ProcessReason.REJECTED, "credential", "unauthorized", "인증 실패");
+    AUTHENTICATION_FAILED(ProcessReason.REJECTED, "credential", "unauthorized", "인증 실패."),
+
+    SCOPE_GRANT_FAILED(ProcessReason.FAILURE, "scope", "unauthorized", "권한 부여 실패.");
 
 
     private final ProcessReason reason;

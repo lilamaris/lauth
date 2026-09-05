@@ -1,7 +1,8 @@
 package com.lilamaris.lauth.identity.application.service;
 
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
-import com.lilamaris.lauth.identity.application.model.UserPrincipal;
+import com.lilamaris.lauth.identity.application.internal.UserService;
+import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.in.RegisterCredentialUseCase;
 import com.lilamaris.lauth.identity.application.port.in.command.RegisterCredentialCommand;
 import com.lilamaris.lauth.identity.application.port.out.CredentialReader;
@@ -20,7 +21,7 @@ import java.time.Clock;
 public class RegisterCredentialService implements RegisterCredentialUseCase {
     private final CredentialReader credentialReader;
     private final CredentialStore credentialStore;
-    private final UserStore userStore;
+    private final UserService userService;
 
     private final PasswordEncoder passwordEncoder;
     private final Clock clock;
@@ -34,11 +35,12 @@ public class RegisterCredentialService implements RegisterCredentialUseCase {
 
         var now = clock.instant();
         var displayName = command.displayName();
+        var userPrincipal = userService.createNewUser(displayName, now);
+
         var passwordHash = passwordEncoder.encode(command.password());
-        var savedUser = userStore.save(displayName, now);
-        var isCredentialCreated = credentialStore.save(savedUser.getId(), email, passwordHash, now);
+        var isCredentialCreated = credentialStore.save(userPrincipal.userId(), email, passwordHash, now);
         if (!isCredentialCreated) throw new ApplicationException(IdentityServiceProgressCode.EMAIL_DUPLICATED);
 
-        return UserPrincipal.from(savedUser);
+        return userPrincipal;
     }
 }
