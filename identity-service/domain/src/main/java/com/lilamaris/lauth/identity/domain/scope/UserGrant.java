@@ -1,4 +1,4 @@
-package com.lilamaris.lauth.identity.domain;
+package com.lilamaris.lauth.identity.domain.scope;
 
 import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
 import jakarta.persistence.*;
