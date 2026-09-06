@@ -22,7 +22,7 @@ public class Scope {
     @Column(name = "resource", nullable = false)
     private String resource;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = ActionAttributeConverter.class)
     @Column(name = "action", nullable = false)
     private Action action;
 
