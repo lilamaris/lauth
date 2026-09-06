@@ -39,6 +39,7 @@ public class UserJdbcAdapter implements UserStore, UserPrincipalReader {
         var scopes = rows.stream()
                 .filter(Objects::nonNull)
                 .map(UserRow.Principal::toResourceScope)
+                .flatMap(Optional::stream)
                 .collect(Collectors.toSet());
 
         return Optional.of(
