@@ -13,5 +13,6 @@ public class ScopeSql {
                 :description,
                 :createdAt
             )
+            ON CONFLICT DO NOTHING
             """;
 }
