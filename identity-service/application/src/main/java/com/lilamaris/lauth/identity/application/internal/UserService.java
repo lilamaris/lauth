@@ -31,7 +31,7 @@ public class UserService {
         var scopeIds = scopes.stream().map(Scope::getId).collect(Collectors.toUnmodifiableSet());
         var resourceScopes = scopes.stream().map(ResourceScope::from).collect(Collectors.toUnmodifiableSet());
 
-        if (userGrantStore.grantAll(userId, scopeIds, createdAt))
+        if (!userGrantStore.grantAll(userId, scopeIds, createdAt))
             throw new ApplicationException(IdentityServiceProgressCode.SCOPE_GRANT_FAILED);
 
         return UserPrincipal.of(
