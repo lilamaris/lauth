@@ -4,6 +4,7 @@ import com.lilamaris.lauth.identity.application.port.out.ScopeStore;
 import com.lilamaris.lauth.identity.domain.scope.Scope;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.ApplicationArguments;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
@@ -17,7 +18,7 @@ public class ScopeInitializer {
     private final ScopeProperties properties;
     private final Clock clock;
 
-    public void run() {
+    public void run(ApplicationArguments args) {
         if (!properties.sync()) {
             log.info("Scope definition sync is disabled.");
             return;
