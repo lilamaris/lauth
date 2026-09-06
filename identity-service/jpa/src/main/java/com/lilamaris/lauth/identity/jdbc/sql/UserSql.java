@@ -17,6 +17,7 @@ public class UserSql {
     public static final String FIND_PRINCIPAL_BY_ID = """
             WITH granted_scope AS (
                 SELECT
+                    g.user_id,
                     s.resource,
                     s.action
                 FROM user_grant g
@@ -30,7 +31,7 @@ public class UserSql {
                 u.created_at AS createdAt,
                 u.updated_at AS updatedAt,
                 g.resource AS resource,
-                g.action AS action
+                g.action AS actionStr
             FROM service_user u
             LEFT JOIN granted_scope g
                 ON g.user_id = u.id
