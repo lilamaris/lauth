@@ -12,6 +12,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
@@ -30,9 +31,9 @@ public class CredentialJdbcAdapter implements CredentialStore, CredentialAuthRea
             var updateCount = jdbcClient.sql(sql)
                     .param("userId", credential.getUserId())
                     .param("email", credential.getEmail())
-                    .param("passwordHasH", credential.getPasswordHash())
-                    .param("createdAt", credential.getCreatedAt())
-                    .param("updatedAt", credential.getUpdatedAt())
+                    .param("passwordHash", credential.getPasswordHash())
+                    .param("createdAt", Timestamp.from(credential.getCreatedAt()))
+                    .param("updatedAt", Timestamp.from(credential.getUpdatedAt()))
                     .update();
 
             return updateCount > 0;

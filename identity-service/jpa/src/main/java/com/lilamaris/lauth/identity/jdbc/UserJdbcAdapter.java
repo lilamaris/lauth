@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
@@ -62,8 +63,8 @@ public class UserJdbcAdapter implements UserStore, UserPrincipalReader {
 
         return jdbcClient.sql(sql)
                 .param("displayName", user.getDisplayName())
-                .param("createdAt", user.getCreatedAt())
-                .param("updatedAt", user.getUpdatedAt())
+                .param("createdAt", Timestamp.from(user.getCreatedAt()))
+                .param("updatedAt", Timestamp.from(user.getUpdatedAt()))
                 .query(UUID.class)
                 .single();
     }

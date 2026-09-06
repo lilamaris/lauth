@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class UserGrantJdbcAdapter implements UserGrantStore {
                         scope -> new MapSqlParameterSource()
                                 .addValue("userId", userId)
                                 .addValue("scopeId", scopeIds)
-                                .addValue("createdAt", createdAt)
+                                .addValue("createdAt", Timestamp.from(createdAt))
                 )
                 .toArray(SqlParameterSource[]::new);
 

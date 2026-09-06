@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Component;
 
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ public class ScopeJdbcAdapter implements ScopeStore {
                         .addValue("resource", scope.getResource())
                         .addValue("action", scope.getAction().canonicalName())
                         .addValue("description", scope.getDescription())
-                        .addValue("createdAt", scope.getCreatedAt())
+                        .addValue("createdAt", Timestamp.from(scope.getCreatedAt()))
                 )
                 .toArray(SqlParameterSource[]::new);
 
