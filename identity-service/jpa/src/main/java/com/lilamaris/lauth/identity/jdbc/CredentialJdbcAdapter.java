@@ -6,7 +6,6 @@ import com.lilamaris.lauth.identity.application.port.out.CredentialStore;
 import com.lilamaris.lauth.identity.domain.Credential;
 import com.lilamaris.lauth.identity.jdbc.row.CredentialRow;
 import com.lilamaris.lauth.identity.jdbc.sql.CredentialSql;
-import com.lilamaris.lauth.identity.jdbc.utils.ParameterUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.jdbc.core.simple.JdbcClient;
@@ -47,7 +46,7 @@ public class CredentialJdbcAdapter implements CredentialStore, CredentialAuthRea
         var sql = CredentialSql.FIND_CHALLENGE_BY_EMAIL;
 
         return jdbcClient.sql(sql)
-                .param("email", ParameterUtils.escape(email))
+                .param("email", email)
                 .query(CredentialRow.Challenge.class)
                 .optional()
                 .map(CredentialRow.Challenge::toModel);
