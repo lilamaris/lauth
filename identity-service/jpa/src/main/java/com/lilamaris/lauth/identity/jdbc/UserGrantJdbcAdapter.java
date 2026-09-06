@@ -25,9 +25,9 @@ public class UserGrantJdbcAdapter implements UserGrantStore {
         var sql = UserGrantSql.INSERT_USER_GRANT;
         var args = scopeIds.stream()
                 .map(
-                        scope -> new MapSqlParameterSource()
+                        scopeId -> new MapSqlParameterSource()
                                 .addValue("userId", userId)
-                                .addValue("scopeId", scopeIds)
+                                .addValue("scopeId", scopeId)
                                 .addValue("createdAt", Timestamp.from(createdAt))
                 )
                 .toArray(SqlParameterSource[]::new);
