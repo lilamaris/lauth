@@ -12,4 +12,5 @@ dependencies {
 
     implementation(libs.spring.security.crypto)
     implementation(libs.spring.security.jose)
+    implementation(libs.bcprov.jdk18on)
 }

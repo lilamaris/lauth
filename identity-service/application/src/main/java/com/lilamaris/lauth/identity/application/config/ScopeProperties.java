@@ -17,7 +17,6 @@ public record ScopeProperties(
         @DefaultValue("false")
         boolean sync,
 
-        @NotNull
         List<@Valid @NotNull ScopeDefinition> definitions
 ) {
     public record ScopeDefinition(
