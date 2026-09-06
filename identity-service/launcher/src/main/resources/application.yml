@@ -1,3 +1,14 @@
+lauth:
+  scopes:
+    sync: ${LAUTH_SYNC_SCOPE_DEFINITION:false}
+    definitions:
+      - resource: user
+        action: READ
+        description: Can read user data
+      - resource: user
+        action: WRITE
+        description: Can write user data
+
 server:
   port: ${PORT:8081}
 
