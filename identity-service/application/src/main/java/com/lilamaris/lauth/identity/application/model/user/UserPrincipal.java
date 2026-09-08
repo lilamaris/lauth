@@ -12,17 +12,17 @@ public record UserPrincipal(
         String displayName,
         Instant createdAt,
         Instant updatedAt,
-        GrantedScope scopes
+        GrantedScope granted
 ) {
     public UserPrincipal {
         ObjectPrecondition.requireNonNull(userId, "userId");
         StringPrecondition.requireNonBlank(displayName, "displayName");
         ObjectPrecondition.requireNonNull(createdAt, "createdAt");
         ObjectPrecondition.requireNonNull(updatedAt, "updatedAt");
-        ObjectPrecondition.requireNonNull(scopes, "scopes");
+        ObjectPrecondition.requireNonNull(granted, "granted");
     }
 
-    public static UserPrincipal of(UUID userId, String displayName, Instant createdAt, Instant updatedAt, GrantedScope scopes) {
-        return new UserPrincipal(userId, displayName, createdAt, updatedAt, scopes);
+    public static UserPrincipal of(UUID userId, String displayName, Instant createdAt, Instant updatedAt, GrantedScope granted) {
+        return new UserPrincipal(userId, displayName, createdAt, updatedAt, granted);
     }
 }
