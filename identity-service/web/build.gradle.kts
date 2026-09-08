@@ -10,6 +10,6 @@ version = "0.0.1-SNAPSHOT"
 dependencies {
     implementation(project(":identity-service:application"))
 
-    implementation(project(":kernel:kernel-core"))
+    implementation(project(":kernel:kernel-web"))
     testImplementation(project(":kernel:kernel-test"))
 }
