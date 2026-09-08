@@ -60,6 +60,8 @@ spring-boot-testcontainers = { module = "org.springframework.boot:spring-boot-te
 spring-boot-starter-flyway = { module = "org.springframework.boot:spring-boot-starter-flyway" }
 flyway-database-postgresql = { module = "org.flywaydb:flyway-database-postgresql" }
 testcontainers-postgresql = { module = "org.testcontainers:testcontainers-postgresql" }
+spring-boot-starter-data-redis = { module = "org.springframework.boot:spring-boot-starter-data-redis" }
+spring-boot-starter-data-redis-test = { module = "org.springframework.boot:spring-boot-starter-data-redis-test" }
 
 ## Spring Boot - Web
 jakarta-servlet-api = { module = "jakarta.servlet:jakarta.servlet-api" }
