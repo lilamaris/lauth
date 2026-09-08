@@ -1,4 +1,8 @@
 lauth:
+  policy:
+    user:
+      displayNameAdjectiveSource: ${LAUTH_DISPLAYNAME_ADJECTIVE_SOURCE}
+      displayNameNounSource: ${LAUTH_DISPLAYNAME_NOUN_SOURCE}
   jwks:
     activeKid: ${LAUTH_JWKS_ACTIVE_KID}
     keySource: ${LAUTH_JWKS_KEY_SOURCE}

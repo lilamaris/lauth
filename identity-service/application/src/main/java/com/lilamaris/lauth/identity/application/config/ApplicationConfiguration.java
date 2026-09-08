@@ -2,6 +2,7 @@ package com.lilamaris.lauth.identity.application.config;
 
 import com.lilamaris.lauth.identity.application.internal.jwks.JWKBuilder;
 import com.lilamaris.lauth.identity.application.internal.jwks.JWKSRegistry;
+import com.lilamaris.lauth.identity.application.internal.random.RandomDisplayName;
 import com.lilamaris.lauth.identity.application.port.out.JWKSReader;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
@@ -15,6 +16,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
+import java.io.IOException;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.util.List;
@@ -24,7 +26,8 @@ import java.util.List;
         ApplicationProperties.class,
         JwtProperties.class,
         ScopeProperties.class,
-        JWKSProperties.class
+        JWKSProperties.class,
+        PolicyProperties.class
 })
 public class ApplicationConfiguration {
     @Bean
@@ -61,5 +64,11 @@ public class ApplicationConfiguration {
         JWKSource<SecurityContext> source = (selector, context) -> selector.select(new JWKSet(activeKey));
 
         return new NimbusJwtEncoder(source);
+    }
+
+    @Bean
+    RandomDisplayName randomDisplayName(SecureRandom secureRandom, PolicyProperties properties) throws IOException {
+        var props = properties.user();
+        return new RandomDisplayName(secureRandom, props.displayNameAdjectiveSource(), props.displayNameNounSource());
     }
 }
