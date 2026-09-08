@@ -1,4 +1,7 @@
 lauth:
+  jwks:
+    activeKid: ${LAUTH_JWKS_ACTIVE_KID}
+    keySource: ${LAUTH_JWKS_KEY_SOURCE}
   scopes:
     sync: ${LAUTH_SYNC_SCOPE_DEFINITION:false}
     definitions:
