@@ -11,6 +11,9 @@ lauth:
       - resource: user
         action: WRITE
         description: Can write user data
+  security:
+    permits:
+      - /.well-known/**
 
 server:
   port: ${PORT:8081}

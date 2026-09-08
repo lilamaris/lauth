@@ -10,6 +10,7 @@ dependencies {
     implementation(project(":identity-service:jpa"))
     implementation(project(":identity-service:fileIO"))
     implementation(project(":identity-service:web"))
+    implementation(project(":identity-service:security"))
 
     implementation(libs.spring.boot.starter.flyway)
     implementation(libs.flyway.database.postgresql)
