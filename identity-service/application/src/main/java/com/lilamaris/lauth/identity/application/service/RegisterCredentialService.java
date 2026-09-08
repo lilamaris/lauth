@@ -2,6 +2,7 @@ package com.lilamaris.lauth.identity.application.service;
 
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
 import com.lilamaris.lauth.identity.application.internal.UserService;
+import com.lilamaris.lauth.identity.application.internal.random.RandomDisplayName;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.in.RegisterCredentialUseCase;
 import com.lilamaris.lauth.identity.application.port.in.command.RegisterCredentialCommand;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Clock;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ public class RegisterCredentialService implements RegisterCredentialUseCase {
     private final CredentialStore credentialStore;
     private final UserService userService;
 
+    private final RandomDisplayName randomDisplayName;
     private final PasswordEncoder passwordEncoder;
     private final Clock clock;
 
@@ -33,7 +36,8 @@ public class RegisterCredentialService implements RegisterCredentialUseCase {
         if (isExistsEmail) throw new ApplicationException(IdentityServiceProgressCode.EMAIL_DUPLICATED);
 
         var now = clock.instant();
-        var displayName = command.displayName();
+        var displayName = Optional.ofNullable(command.displayName())
+                .orElseGet(randomDisplayName::generate);
         var userPrincipal = userService.createNewUser(displayName, now);
 
         var passwordHash = passwordEncoder.encode(command.password());
