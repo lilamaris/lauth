@@ -4,7 +4,10 @@ import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
 import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
 import com.lilamaris.lauth.identity.domain.scope.Action;
 
+import java.util.Collection;
+import java.util.Set;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public class ScopeCodec {
     private static final String SEPARATOR = ".";
@@ -25,11 +28,18 @@ public class ScopeCodec {
         } catch (IllegalArgumentException e) {
             throw new IllegalStateException("Action is not defined. action=" + actionStr);
         }
+    }
 
+    public static Set<ResourceScope> decode(Collection<String> scope) {
+        return scope.stream().map(ScopeCodec::decode).collect(Collectors.toUnmodifiableSet());
     }
 
     public static String encode(ResourceScope scope) {
         ObjectPrecondition.requireNonNull(scope, "scope");
         return scope.resource() + SEPARATOR + scope.action().canonicalName();
+    }
+
+    public static Set<String> encode(Collection<ResourceScope> scope) {
+        return scope.stream().map(ScopeCodec::encode).collect(Collectors.toUnmodifiableSet());
     }
 }

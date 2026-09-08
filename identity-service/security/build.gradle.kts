@@ -1,7 +1,7 @@
 plugins {
-    id("autoconfigure.spring")
     id("module.java")
-    id("web.spring")
+    id("security.spring")
+    id("autoconfigure.spring")
 }
 
 group = "com.lilamaris.lauth"
@@ -12,4 +12,8 @@ dependencies {
 
     implementation(project(":kernel:kernel-web"))
     testImplementation(project(":kernel:kernel-test"))
+
+    implementation(libs.springdoc.openapi.starter.webmvc.ui)
+    implementation(libs.spring.boot.starter.oauth2.client)
+    implementation(libs.tools.jackson.databind)
 }
