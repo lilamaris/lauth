@@ -14,6 +14,8 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     SESSION_ALREADY_REVOKED(ProcessReason.REJECTED, "session", StandardProgressType.DUPLICATED, "이미 만료된 세션입니다."),
     EMAIL_DUPLICATED(ProcessReason.REJECTED, "credential", StandardProgressType.DUPLICATED, "이미 사용 중인 이메일입니다."),
     AUTHENTICATION_FAILED(ProcessReason.REJECTED, "credential", IdentityServiceProgressType.AUTHENTICATION_FAILED, "인증 실패."),
+    REFRESH_TOKEN_ALREADY_CONSUMED(ProcessReason.REJECTED, "refresh-token", StandardProgressType.DUPLICATED, "이미 사용된 재발급 토큰입니다."),
+    TOKEN_VERIFICATION_FAILED(ProcessReason.REJECTED, "token", IdentityServiceProgressType.TOKEN_VERIFICATION_FAILED, "토큰 검증 실패."),
 
     SCOPE_GRANT_FAILED(ProcessReason.FAILURE, "scope", IdentityServiceProgressType.GRANT_FAILED, "권한 부여 실패.");
 
