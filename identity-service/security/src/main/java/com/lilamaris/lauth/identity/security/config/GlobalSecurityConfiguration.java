@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.identity.security.config;
 
-import com.lilamaris.lauth.identity.application.port.in.IssueTokenPairUseCase;
+import com.lilamaris.lauth.identity.application.port.in.LoginSessionUseCase;
 import com.lilamaris.lauth.identity.security.handler.GlobalAccessDeniedHandler;
 import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationEntryPoint;
 import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationFailureHandler;
@@ -89,8 +89,8 @@ public class GlobalSecurityConfiguration {
     }
 
     @Bean
-    GlobalAuthenticationSuccessHandler globalAuthenticationSuccessHandler(IssueTokenPairUseCase issueTokenPairUseCase, com.lilamaris.lauth.kenel.web.response.ServletResponseWriter servletResponseWriter) {
-        return new GlobalAuthenticationSuccessHandler(issueTokenPairUseCase, servletResponseWriter);
+    GlobalAuthenticationSuccessHandler globalAuthenticationSuccessHandler(LoginSessionUseCase loginSessionUseCase, com.lilamaris.lauth.kenel.web.response.ServletResponseWriter servletResponseWriter, ProblemDetailFactory problemDetailFactory) {
+        return new GlobalAuthenticationSuccessHandler(loginSessionUseCase, servletResponseWriter, problemDetailFactory);
     }
 
     @Bean

@@ -1,5 +1,6 @@
-package com.lilamaris.lauth.identity.application.internal.random;
+package com.lilamaris.lauth.identity.application.model.opaque;
 
+import com.lilamaris.lauth.identity.application.internal.random.RandomGenerator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -8,11 +9,10 @@ import java.util.Base64;
 
 @Component
 @RequiredArgsConstructor
-public class RandomOpaqueString implements RandomGenerator<String> {
+public class OpaqueTokenGenerator {
     private final Base64.Encoder encoder = Base64.getUrlEncoder().withoutPadding();
     private final SecureRandom secureRandom;
 
-    @Override
     public String generate() {
         byte[] bytes = new byte[48];
         secureRandom.nextBytes(bytes);

@@ -1,5 +1,6 @@
 package com.lilamaris.lauth.identity.application.config;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.bind.DefaultValue;
@@ -12,6 +13,9 @@ import java.time.ZoneId;
 public record ApplicationProperties(
         @DefaultValue("UTC")
         @NotNull
-        ZoneId timezone
+        ZoneId timezone,
+
+        @NotBlank
+        String hasherKey
 ) {
 }

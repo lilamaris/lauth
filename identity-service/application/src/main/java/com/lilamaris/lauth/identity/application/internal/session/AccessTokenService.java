@@ -1,8 +1,7 @@
-package com.lilamaris.lauth.identity.application.internal.jwt;
+package com.lilamaris.lauth.identity.application.internal.session;
 
 import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.lauth.identity.application.config.JwtProperties;
-import com.lilamaris.lauth.identity.application.internal.random.RandomOpaqueString;
+import com.lilamaris.lauth.identity.application.config.session.AccessTokenProperties;
 import com.lilamaris.lauth.identity.application.model.jwt.TokenMetadata;
 import com.lilamaris.lauth.identity.application.model.scope.ScopeCodec;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
@@ -12,31 +11,29 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Component;
 
-import java.time.Clock;
+import java.time.Instant;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class TokenService {
-    private final JwtProperties properties;
+public class AccessTokenService {
+    private final AccessTokenProperties accessTokenProperties;
     private final JwtEncoder jwtEncoder;
-    private final RandomOpaqueString randomString;
-    private final Clock clock;
 
-    public TokenMetadata createAccessToken(UserPrincipal principal) {
+    public TokenMetadata create(UserPrincipal principal, UUID sessionId, Instant issuedAt) {
         ObjectPrecondition.requireNonNull(principal, "principal");
 
-        var props = properties.accessToken();
-        var issuedAt = clock.instant();
-        var expiresAt = issuedAt.plus(props.expiration());
+        var expiresAt = issuedAt.plus(accessTokenProperties.expiration());
 
         var subject = principal.userId().toString();
         var scopes = ScopeCodec.encode(principal.granted().scopes());
 
         var claims = JwtClaimsSet.builder()
-                .issuer(props.issuer())
+                .issuer(accessTokenProperties.issuer())
                 .issuedAt(issuedAt)
                 .expiresAt(expiresAt)
                 .subject(subject)
+                .claim("sid", sessionId)
                 .claim("scopes", scopes)
                 .claim("display", principal.displayName())
                 .build();
@@ -45,14 +42,5 @@ public class TokenService {
         var value = jwtEncoder.encode(parameters).getTokenValue();
 
         return TokenMetadata.accessToken(value, issuedAt, expiresAt);
-    }
-
-    public TokenMetadata createRefreshToken() {
-        var props = properties.refreshToken();
-        var issuedAt = clock.instant();
-        var expiresAt = issuedAt.plus(props.expiration());
-        var value = randomString.generate();
-
-        return TokenMetadata.refreshToken(value, issuedAt, expiresAt);
     }
 }

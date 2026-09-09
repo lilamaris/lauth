@@ -1,4 +1,13 @@
 lauth:
+  timezone: Asia/Seoul
+  hasherKey: ${LAUTH_HASHER_KEY}
+  session:
+    expiration: ${LAUTH_SESSION_EXPIRATION}
+    accessToken:
+      issuer: ${LAUTH_SESSION_ACCESS_TOKEN_ISSUER}
+      expiration: ${LAUTH_SESSION_ACCESS_TOKEN_EXPIRATION}
+    refreshToken:
+      expiration: ${LAUTH_SESSION_REFRESH_TOKEN_EXPIRATION}
   policy:
     user:
       displayNameAdjectiveSource: ${LAUTH_DISPLAYNAME_ADJECTIVE_SOURCE}
