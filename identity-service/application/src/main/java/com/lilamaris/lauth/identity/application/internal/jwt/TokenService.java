@@ -2,7 +2,7 @@ package com.lilamaris.lauth.identity.application.internal.jwt;
 
 import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
 import com.lilamaris.lauth.identity.application.config.JwtProperties;
-import com.lilamaris.lauth.identity.application.internal.random.RandomBase64URL;
+import com.lilamaris.lauth.identity.application.internal.random.RandomOpaqueString;
 import com.lilamaris.lauth.identity.application.model.jwt.TokenMetadata;
 import com.lilamaris.lauth.identity.application.model.scope.ScopeCodec;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
@@ -19,7 +19,7 @@ import java.time.Clock;
 public class TokenService {
     private final JwtProperties properties;
     private final JwtEncoder jwtEncoder;
-    private final RandomBase64URL randomString;
+    private final RandomOpaqueString randomString;
     private final Clock clock;
 
     public TokenMetadata createAccessToken(UserPrincipal principal) {
