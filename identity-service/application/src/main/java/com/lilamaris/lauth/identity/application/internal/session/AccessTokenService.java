@@ -20,9 +20,12 @@ public class AccessTokenService {
     private final AccessTokenProperties accessTokenProperties;
     private final JwtEncoder jwtEncoder;
 
-    public TokenMetadata create(UserPrincipal principal, UUID sessionId, Instant issuedAt) {
+    public TokenMetadata issue(UserPrincipal principal, UUID sessionId, Instant issuedAt) {
         ObjectPrecondition.requireNonNull(principal, "principal");
+        return create(principal, sessionId, issuedAt);
+    }
 
+    private TokenMetadata create(UserPrincipal principal, UUID sessionId, Instant issuedAt) {
         var expiresAt = issuedAt.plus(accessTokenProperties.expiration());
 
         var subject = principal.userId().toString();
