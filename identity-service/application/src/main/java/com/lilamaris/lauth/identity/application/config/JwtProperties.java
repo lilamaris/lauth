@@ -13,9 +13,11 @@ import java.time.Duration;
 @ConfigurationProperties(prefix = "lauth.jwt")
 public record JwtProperties(
         @Valid
+        @DefaultValue
         AccessToken accessToken,
 
         @Valid
+        @DefaultValue
         RefreshToken refreshToken
 ) {
     public record AccessToken(

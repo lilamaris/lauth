@@ -12,6 +12,7 @@ import java.nio.file.Path;
 @ConfigurationProperties(prefix = "lauth.policy")
 public record PolicyProperties(
         @Valid
+        @DefaultValue
         User user
 ) {
     public record User(
