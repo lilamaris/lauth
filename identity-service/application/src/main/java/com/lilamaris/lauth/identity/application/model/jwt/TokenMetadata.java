@@ -16,7 +16,7 @@ public record TokenMetadata(
         ObjectPrecondition.requireNonNull(type, "type");
         StringPrecondition.requireNonBlank(value, "value");
         ObjectPrecondition.requireNonNull(issuedAt, "issuedAt");
-        TimePrecondition.requireAfterOrEqual(issuedAt, expiresAt, "issuedAt", "expiresAt");
+        TimePrecondition.requireAfterOrEqual(expiresAt, issuedAt, "expiresAt", "issuedAt");
     }
 
     public static TokenMetadata accessToken(String value, Instant issuedAt, Instant expiresAt) {
