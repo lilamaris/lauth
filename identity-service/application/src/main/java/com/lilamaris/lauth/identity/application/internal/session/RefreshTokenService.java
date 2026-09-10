@@ -1,6 +1,5 @@
 package com.lilamaris.lauth.identity.application.internal.session;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
 import com.lilamaris.lauth.identity.application.config.session.RefreshTokenProperties;
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
 import com.lilamaris.lauth.identity.application.model.jwt.TokenMetadata;
@@ -11,7 +10,8 @@ import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenPurpose;
 import com.lilamaris.lauth.identity.application.model.session.SessionContext;
 import com.lilamaris.lauth.identity.application.port.out.RefreshTokenStore;
 import com.lilamaris.lauth.identity.domain.RefreshToken;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,7 +1,7 @@
 package com.lilamaris.lauth.identity.security.method.credential.request;
 
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
 import com.lilamaris.lauth.identity.security.method.credential.model.Credential;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 
 public record SignInRequest(
         String email,

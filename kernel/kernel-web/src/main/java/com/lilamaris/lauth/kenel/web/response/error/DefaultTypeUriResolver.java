@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.kenel.web.response.error;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import lombok.RequiredArgsConstructor;
 
 import java.net.URI;

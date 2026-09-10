@@ -6,7 +6,7 @@ import com.lilamaris.lauth.identity.application.port.in.LoginSessionUseCase;
 import com.lilamaris.lauth.kenel.web.response.ServletResponseWriter;
 import com.lilamaris.lauth.kenel.web.response.error.ProblemDetailFactory;
 import com.lilamaris.lauth.kenel.web.response.error.StandardErrorDescriptor;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;

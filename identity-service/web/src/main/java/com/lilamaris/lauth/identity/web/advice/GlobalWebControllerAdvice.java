@@ -2,7 +2,7 @@ package com.lilamaris.lauth.identity.web.advice;
 
 import com.lilamaris.lauth.kenel.web.response.error.ProblemDetailFactory;
 import com.lilamaris.lauth.kenel.web.response.error.StandardErrorDescriptor;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

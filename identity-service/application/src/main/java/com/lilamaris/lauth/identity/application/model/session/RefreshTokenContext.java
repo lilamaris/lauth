@@ -1,8 +1,8 @@
 package com.lilamaris.lauth.identity.application.model.session;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;

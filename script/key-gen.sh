@@ -43,7 +43,7 @@ Examples:
   ${0##./} \\
     --prvk-name my-private \\
     --pubk-name my-public \\
-    /run/cozyr/secrets
+    /run/lauth/secrets
 EOF
 }
 

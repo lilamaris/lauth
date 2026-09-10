@@ -5,7 +5,7 @@ import com.lilamaris.lauth.identity.application.internal.session.SessionTxServic
 import com.lilamaris.lauth.identity.application.model.jwt.TokenPair;
 import com.lilamaris.lauth.identity.application.port.in.RefreshSessionUseCase;
 import com.lilamaris.lauth.identity.application.port.in.command.RefreshSessionCommand;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

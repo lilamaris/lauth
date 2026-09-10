@@ -1,7 +1,7 @@
 package com.lilamaris.lauth.identity.application.model.opaque;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 
 import java.util.regex.Pattern;
 

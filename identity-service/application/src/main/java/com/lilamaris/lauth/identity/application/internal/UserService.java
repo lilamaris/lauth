@@ -9,7 +9,7 @@ import com.lilamaris.lauth.identity.application.port.out.UserGrantStore;
 import com.lilamaris.lauth.identity.application.port.out.UserStore;
 import com.lilamaris.lauth.identity.domain.User;
 import com.lilamaris.lauth.identity.domain.scope.Scope;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

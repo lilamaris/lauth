@@ -10,7 +10,7 @@ import com.lilamaris.lauth.identity.application.port.in.command.RefreshSessionCo
 import com.lilamaris.lauth.identity.application.port.out.RefreshTokenContextReader;
 import com.lilamaris.lauth.identity.application.port.out.RefreshTokenStore;
 import com.lilamaris.lauth.identity.application.port.out.SessionStore;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;

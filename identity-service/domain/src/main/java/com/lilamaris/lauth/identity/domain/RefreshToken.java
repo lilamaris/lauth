@@ -1,8 +1,8 @@
 package com.lilamaris.lauth.identity.domain;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.TimePrecondition;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.TimePrecondition;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

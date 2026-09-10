@@ -3,7 +3,7 @@ package com.lilamaris.lauth.identity.security.method.credential.provider;
 import com.lilamaris.lauth.identity.application.model.scope.ScopeCodec;
 import com.lilamaris.lauth.identity.application.port.in.AuthenticateCredentialUseCase;
 import com.lilamaris.lauth.identity.security.method.credential.request.CredentialAuthenticateToken;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationException;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.jspecify.annotations.Nullable;

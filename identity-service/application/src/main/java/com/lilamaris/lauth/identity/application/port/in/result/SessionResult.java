@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.identity.application.port.in.result;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 
 import java.util.UUID;
 

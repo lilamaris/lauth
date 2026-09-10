@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.identity.security.method.credential.model;
 
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 
 public record Credential(
         String email,

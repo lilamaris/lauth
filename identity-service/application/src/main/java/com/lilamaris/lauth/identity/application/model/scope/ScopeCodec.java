@@ -1,8 +1,8 @@
 package com.lilamaris.lauth.identity.application.model.scope;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
 import com.lilamaris.lauth.identity.domain.scope.Action;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 
 import java.util.Collection;
 import java.util.Set;

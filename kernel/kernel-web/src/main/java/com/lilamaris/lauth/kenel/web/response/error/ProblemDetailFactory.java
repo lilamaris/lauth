@@ -1,9 +1,9 @@
 package com.lilamaris.lauth.kenel.web.response.error;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationCode;
-import com.lilamaris.shrturl.kernel.application.exception.ProcessReason;
-import com.lilamaris.shrturl.kernel.application.exception.ProgressType;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationCode;
+import com.lilamaris.lauth.kernel.application.exception.ProcessReason;
+import com.lilamaris.lauth.kernel.application.exception.ProgressType;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ProblemDetail;
 

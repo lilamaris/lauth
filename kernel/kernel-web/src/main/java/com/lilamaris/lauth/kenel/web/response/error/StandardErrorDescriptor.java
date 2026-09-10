@@ -1,8 +1,8 @@
 package com.lilamaris.lauth.kenel.web.response.error;
 
-import com.lilamaris.shrturl.kernel.application.exception.ProcessReason;
-import com.lilamaris.shrturl.kernel.application.exception.ProgressType;
-import com.lilamaris.shrturl.kernel.application.exception.StandardProgressType;
+import com.lilamaris.lauth.kernel.application.exception.ProcessReason;
+import com.lilamaris.lauth.kernel.application.exception.ProgressType;
+import com.lilamaris.lauth.kernel.application.exception.StandardProgressType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

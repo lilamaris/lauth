@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.identity.application.model.session;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import org.jspecify.annotations.Nullable;
 
 import java.time.Instant;

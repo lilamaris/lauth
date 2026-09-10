@@ -1,9 +1,9 @@
 package com.lilamaris.lauth.identity.application.exception;
 
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationProgressCode;
-import com.lilamaris.shrturl.kernel.application.exception.ProcessReason;
-import com.lilamaris.shrturl.kernel.application.exception.ProgressType;
-import com.lilamaris.shrturl.kernel.application.exception.StandardProgressType;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationProgressCode;
+import com.lilamaris.lauth.kernel.application.exception.ProcessReason;
+import com.lilamaris.lauth.kernel.application.exception.ProgressType;
+import com.lilamaris.lauth.kernel.application.exception.StandardProgressType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

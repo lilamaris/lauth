@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.identity.application.port.in.command;
 
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 import org.jspecify.annotations.Nullable;
 
 public record RegisterCredentialCommand(

@@ -1,10 +1,10 @@
 package com.lilamaris.lauth.identity.application.internal.session;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
 import com.lilamaris.lauth.identity.application.config.session.AccessTokenProperties;
 import com.lilamaris.lauth.identity.application.model.jwt.TokenMetadata;
 import com.lilamaris.lauth.identity.application.model.scope.ScopeCodec;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;

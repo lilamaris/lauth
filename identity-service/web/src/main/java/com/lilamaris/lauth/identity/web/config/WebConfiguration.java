@@ -2,7 +2,7 @@ package com.lilamaris.lauth.identity.web.config;
 
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressType;
 import com.lilamaris.lauth.kenel.web.response.error.*;
-import com.lilamaris.shrturl.kernel.application.exception.StandardProgressType;
+import com.lilamaris.lauth.kernel.application.exception.StandardProgressType;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

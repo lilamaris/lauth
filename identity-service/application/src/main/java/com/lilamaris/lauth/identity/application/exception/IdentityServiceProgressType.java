@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.identity.application.exception;
 
-import com.lilamaris.shrturl.kernel.application.exception.ProgressType;
+import com.lilamaris.lauth.kernel.application.exception.ProgressType;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor

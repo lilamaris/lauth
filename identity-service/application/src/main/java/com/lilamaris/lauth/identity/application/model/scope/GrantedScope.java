@@ -1,7 +1,7 @@
 package com.lilamaris.lauth.identity.application.model.scope;
 
-import com.lilamaris.cozyr.kernel.core.condition.CollectionPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.CollectionPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 
 import java.util.Set;
 import java.util.UUID;

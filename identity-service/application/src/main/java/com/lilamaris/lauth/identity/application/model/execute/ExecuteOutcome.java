@@ -1,7 +1,7 @@
 package com.lilamaris.lauth.identity.application.model.execute;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.shrturl.kernel.application.exception.ApplicationCode;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationCode;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import org.jspecify.annotations.Nullable;
 
 import java.util.Optional;

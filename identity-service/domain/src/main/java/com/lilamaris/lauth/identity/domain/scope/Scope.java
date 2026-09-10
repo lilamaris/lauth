@@ -1,7 +1,7 @@
 package com.lilamaris.lauth.identity.domain.scope;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

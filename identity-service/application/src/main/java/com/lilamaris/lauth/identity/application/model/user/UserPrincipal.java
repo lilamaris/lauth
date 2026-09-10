@@ -1,8 +1,8 @@
 package com.lilamaris.lauth.identity.application.model.user;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
-import com.lilamaris.cozyr.kernel.core.condition.StringPrecondition;
 import com.lilamaris.lauth.identity.application.model.scope.GrantedScope;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
+import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 
 import java.time.Instant;
 import java.util.UUID;

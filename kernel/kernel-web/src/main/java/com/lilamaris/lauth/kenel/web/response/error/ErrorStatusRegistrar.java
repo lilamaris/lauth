@@ -1,6 +1,6 @@
 package com.lilamaris.lauth.kenel.web.response.error;
 
-import com.lilamaris.shrturl.kernel.application.exception.ProgressType;
+import com.lilamaris.lauth.kernel.application.exception.ProgressType;
 import org.springframework.http.HttpStatus;
 
 import java.util.ArrayList;

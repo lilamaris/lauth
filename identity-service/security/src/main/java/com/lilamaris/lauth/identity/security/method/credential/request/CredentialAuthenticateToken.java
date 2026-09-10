@@ -1,9 +1,9 @@
 package com.lilamaris.lauth.identity.security.method.credential.request;
 
-import com.lilamaris.cozyr.kernel.core.condition.ObjectPrecondition;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.in.command.AuthenticateCredentialCommand;
 import com.lilamaris.lauth.identity.security.method.credential.model.Credential;
+import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
