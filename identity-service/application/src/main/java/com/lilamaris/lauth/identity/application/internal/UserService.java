@@ -1,8 +1,6 @@
 package com.lilamaris.lauth.identity.application.internal;
 
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
-import com.lilamaris.lauth.identity.application.model.scope.GrantedScope;
-import com.lilamaris.lauth.identity.application.model.scope.ResourceScope;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.out.ScopeReader;
 import com.lilamaris.lauth.identity.application.port.out.UserGrantStore;
@@ -29,17 +27,10 @@ public class UserService {
 
         var scopes = scopeReader.findAll();
         var scopeIds = scopes.stream().map(Scope::getId).collect(Collectors.toUnmodifiableSet());
-        var resourceScopes = scopes.stream().map(ResourceScope::from).collect(Collectors.toUnmodifiableSet());
 
         if (!userGrantStore.grantAll(userId, scopeIds, createdAt))
             throw new ApplicationException(IdentityServiceProgressCode.SCOPE_GRANT_FAILED);
 
-        return UserPrincipal.of(
-                userId,
-                user.getDisplayName(),
-                user.getCreatedAt(),
-                user.getUpdatedAt(),
-                GrantedScope.of(userId, resourceScopes)
-        );
+        return UserPrincipal.of(userId, user.getDisplayName(), user.getCreatedAt(), user.getUpdatedAt());
     }
 }

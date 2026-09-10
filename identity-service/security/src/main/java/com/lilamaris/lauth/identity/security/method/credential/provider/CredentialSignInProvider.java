@@ -1,6 +1,5 @@
 package com.lilamaris.lauth.identity.security.method.credential.provider;
 
-import com.lilamaris.lauth.identity.application.model.scope.ScopeCodec;
 import com.lilamaris.lauth.identity.application.port.in.AuthenticateCredentialUseCase;
 import com.lilamaris.lauth.identity.security.method.credential.request.CredentialAuthenticateToken;
 import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
@@ -11,9 +10,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.util.stream.Collectors;
 
 @NullMarked
 @RequiredArgsConstructor
@@ -27,10 +23,7 @@ public class CredentialSignInProvider implements AuthenticationProvider {
 
         try {
             var principal = authenticateCredentialUseCase.authenticate(command);
-            var authorities = ScopeCodec.encode(principal.granted().scopes()).stream()
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toUnmodifiableSet());
-            return CredentialAuthenticateToken.of(principal, authorities);
+            return CredentialAuthenticateToken.of(principal);
         } catch (ApplicationException e) {
             throw new AuthenticationServiceException("Credential Sign-in failed", e);
         }

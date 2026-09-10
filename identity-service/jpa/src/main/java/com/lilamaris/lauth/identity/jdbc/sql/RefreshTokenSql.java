@@ -22,14 +22,10 @@ public class RefreshTokenSql {
                 u.id AS userId,
                 u.display_name AS displayName,
                 u.created_at AS userCreatedAt,
-                u.updated_at AS userUpdatedAt,
-                p.resource AS resource,
-                p.action AS actionStr
+                u.updated_at AS userUpdatedAt
             FROM refresh_token t
             JOIN user_session s ON s.id = t.session_id
             JOIN service_user u ON u.id = s.user_id
-            LEFT JOIN user_grant g ON g.user_id = u.id
-            LEFT JOIN scope p ON p.id = g.scope_id
             WHERE t.id = :refreshTokenId
             """;
 

@@ -11,15 +11,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.time.Clock;
-
 @Service
 @RequiredArgsConstructor
 public class AuthenticateCredentialService implements AuthenticateCredentialUseCase {
     private final UserPrincipalReader userPrincipalReader;
     private final CredentialAuthReader credentialAuthReader;
     private final PasswordEncoder passwordEncoder;
-    private final Clock clock;
 
     @Override
     public UserPrincipal authenticate(AuthenticateCredentialCommand command) {
