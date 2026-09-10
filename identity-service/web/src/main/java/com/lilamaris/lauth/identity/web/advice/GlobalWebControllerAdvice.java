@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.validation.BindException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -48,6 +49,12 @@ public class GlobalWebControllerAdvice {
     public ProblemDetail handleNotFound(NoResourceFoundException exception, HttpServletRequest request) {
         log.warn("Handle NotFound. type={}, path={}, message={}", exception.getClass().getSimpleName(), request.getRequestURI(), exception.getMessage());
         return problemDetailFactory.from(StandardErrorDescriptor.NOT_FOUND);
+    }
+
+    @ExceptionHandler({AuthorizationDeniedException.class})
+    public ProblemDetail handleAccessDenied(Exception exception, HttpServletRequest request) {
+        log.warn("Handle AccessDenied. type={}, path={}, message={}", exception.getClass().getSimpleName(), request.getRequestURI(), exception.getMessage());
+        return problemDetailFactory.from(StandardErrorDescriptor.ACCESS_DENIED);
     }
 
     @ExceptionHandler({Exception.class})
