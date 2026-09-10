@@ -7,9 +7,7 @@ import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
 import java.util.List;
 
 public class CredentialAuthenticateToken extends AbstractAuthenticationToken {
@@ -24,8 +22,8 @@ public class CredentialAuthenticateToken extends AbstractAuthenticationToken {
         this.credential = ObjectPrecondition.requireNonNull(credential, "credential");
     }
 
-    private CredentialAuthenticateToken(@NonNull UserPrincipal principal, @NonNull Collection<? extends GrantedAuthority> grantedAuthorities) {
-        super(grantedAuthorities);
+    private CredentialAuthenticateToken(@NonNull UserPrincipal principal) {
+        super(List.of());
         setAuthenticated(true);
         this.principal = principal;
     }
@@ -34,8 +32,8 @@ public class CredentialAuthenticateToken extends AbstractAuthenticationToken {
         return new CredentialAuthenticateToken(credential);
     }
 
-    public static CredentialAuthenticateToken of(@NonNull UserPrincipal principal, @NonNull Collection<? extends GrantedAuthority> grantedAuthorities) {
-        return new CredentialAuthenticateToken(principal, grantedAuthorities);
+    public static CredentialAuthenticateToken of(@NonNull UserPrincipal principal) {
+        return new CredentialAuthenticateToken(principal);
     }
 
     public AuthenticateCredentialCommand toAuthenticateCommand() {

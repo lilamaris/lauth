@@ -12,4 +12,14 @@ public class UserGrantSql {
                 :createdAt
             )
             """;
+
+    public final static String FIND_GRANT_FROM_USER_ID = """
+            SELECT
+                s.resource AS resource,
+                s.action AS action
+            FROM user_grant g
+            JOIN scope s
+                ON s.id = g.scope_id
+            WHERE g.user_id = :userId
+            """;
 }

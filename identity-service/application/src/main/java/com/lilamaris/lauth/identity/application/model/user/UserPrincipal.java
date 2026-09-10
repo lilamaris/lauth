@@ -1,6 +1,5 @@
 package com.lilamaris.lauth.identity.application.model.user;
 
-import com.lilamaris.lauth.identity.application.model.scope.GrantedScope;
 import com.lilamaris.lauth.kernel.core.condition.ObjectPrecondition;
 import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 
@@ -11,18 +10,16 @@ public record UserPrincipal(
         UUID userId,
         String displayName,
         Instant createdAt,
-        Instant updatedAt,
-        GrantedScope granted
+        Instant updatedAt
 ) {
     public UserPrincipal {
         ObjectPrecondition.requireNonNull(userId, "userId");
         StringPrecondition.requireNonBlank(displayName, "displayName");
         ObjectPrecondition.requireNonNull(createdAt, "createdAt");
         ObjectPrecondition.requireNonNull(updatedAt, "updatedAt");
-        ObjectPrecondition.requireNonNull(granted, "granted");
     }
 
-    public static UserPrincipal of(UUID userId, String displayName, Instant createdAt, Instant updatedAt, GrantedScope granted) {
-        return new UserPrincipal(userId, displayName, createdAt, updatedAt, granted);
+    public static UserPrincipal of(UUID userId, String displayName, Instant createdAt, Instant updatedAt) {
+        return new UserPrincipal(userId, displayName, createdAt, updatedAt);
     }
 }

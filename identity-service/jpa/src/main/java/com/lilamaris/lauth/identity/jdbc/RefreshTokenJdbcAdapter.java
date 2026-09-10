@@ -12,10 +12,8 @@ import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
 import java.time.Instant;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
@@ -50,21 +48,10 @@ public class RefreshTokenJdbcAdapter implements RefreshTokenStore, RefreshTokenC
 
     @Override
     public Optional<RefreshTokenContext> findByRefreshTokenId(UUID refreshTokenId) {
-        var rows = jdbcClient.sql(RefreshTokenSql.FIND_CONTEXT_BY_ID)
+        return jdbcClient.sql(RefreshTokenSql.FIND_CONTEXT_BY_ID)
                 .param("refreshTokenId", refreshTokenId)
                 .query(RefreshTokenRow.Context.class)
-                .list();
-
-        if (rows.isEmpty()) return Optional.empty();
-
-        if (rows.getFirst() == null) return Optional.empty();
-
-        var scopes = rows.stream()
-                .filter(Objects::nonNull)
-                .map(RefreshTokenRow.Context::toResourceScope)
-                .flatMap(Optional::stream)
-                .collect(Collectors.toUnmodifiableSet());
-
-        return Optional.of(rows.getFirst().toContext(scopes));
+                .optional()
+                .map(RefreshTokenRow.Context::toContext);
     }
 }
