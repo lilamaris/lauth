@@ -41,9 +41,4 @@ public class User {
     public static User of(String displayName, Instant createdAt) {
         return new User(displayName, createdAt, createdAt);
     }
-
-    public void updateDisplayName(String displayName, Instant updatedAt) {
-        this.updatedAt = TimePrecondition.requireAfterOrEqual(updatedAt, createdAt, "updatedAt", "createdAt");
-        this.displayName = StringPrecondition.requireNonBlank(displayName, "displayName");
-    }
 }
