@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,6 +44,8 @@ public class AccessTokenService {
                 .claim("sid", sessionId)
                 .claim("scope", scopes)
                 .claim("display", principal.displayName())
+                .claim("createdAt", Date.from(principal.createdAt()))
+                .claim("updatedAt", Date.from(principal.updatedAt()))
                 .build();
 
         var parameters = JwtEncoderParameters.from(claims);
