@@ -19,6 +19,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
@@ -42,6 +43,7 @@ public class GlobalSecurityConfiguration {
             GlobalAccessDeniedHandler globalAccessDeniedHandler,
             GlobalAuthenticationEntryPoint globalAuthenticationEntryPoint,
             JacksonSignInProcessingFilter jacksonSignInProcessingFilter,
+            JwtDecoder jwtDecoder,
             GlobalSecurityProperties properties
     ) {
         if (properties.csrfEnabled()) httpSecurity.csrf(Customizer.withDefaults());
@@ -63,7 +65,15 @@ public class GlobalSecurityConfiguration {
                 .authorizeHttpRequests(customizer -> customizer
                         .requestMatchers(properties.permits().toArray(String[]::new)).permitAll()
                         .requestMatchers(jacksonSignInProcessingFilter.getRequestMatcher()).permitAll()
+                        .requestMatchers("/api/v1/session/**").authenticated()
                         .anyRequest().denyAll()
+                )
+
+                .oauth2ResourceServer(customizer -> customizer
+                        .jwt(jwt -> jwt
+                                .decoder(jwtDecoder)
+                        )
+                        .authenticationEntryPoint(globalAuthenticationEntryPoint)
                 )
 
                 .addFilterBefore(jacksonSignInProcessingFilter, UsernamePasswordAuthenticationFilter.class);

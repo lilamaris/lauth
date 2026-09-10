@@ -9,6 +9,7 @@ import com.lilamaris.lauth.identity.application.internal.random.RandomDisplayNam
 import com.lilamaris.lauth.identity.application.model.opaque.HmacSha256paqueTokenHasher;
 import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenHasher;
 import com.lilamaris.lauth.identity.application.port.out.JWKSReader;
+import com.nimbusds.jose.jwk.JWK;
 import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
@@ -18,7 +19,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 
 import java.io.IOException;
@@ -64,14 +67,24 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    JwtEncoder jwtEncoder(JWKSRegistry jwksRegistry, JWKSProperties properties) {
+    JWK activeJWK(JWKSRegistry jwksRegistry, JWKSProperties properties) {
         var activeKid = properties.activeKid();
         var activeKey = jwksRegistry.get(activeKid);
         if (activeKey == null) throw new IllegalStateException("Active JWKS not found. kid=" + activeKid);
+        return activeKey;
+    }
 
-        JWKSource<SecurityContext> source = (selector, context) -> selector.select(new JWKSet(activeKey));
+    @Bean
+    JwtEncoder jwtEncoder(JWK activeJWK) {
+        JWKSource<SecurityContext> source = (selector, context) -> selector.select(new JWKSet(activeJWK));
 
         return new NimbusJwtEncoder(source);
+    }
+
+    @Bean
+    JwtDecoder jwtDecoder(JWK activeJWK) {
+        JWKSource<SecurityContext> source = (selector, context) -> selector.select(new JWKSet(activeJWK.toPublicJWK()));
+        return NimbusJwtDecoder.withJwkSource(source).build();
     }
 
     @Bean
