@@ -37,7 +37,7 @@ public class AccessTokenService {
                 .expiresAt(expiresAt)
                 .subject(subject)
                 .claim("sid", sessionId)
-                .claim("scopes", scopes)
+                .claim("scope", scopes)
                 .claim("display", principal.displayName())
                 .build();
 
