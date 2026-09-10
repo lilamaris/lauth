@@ -9,6 +9,7 @@ import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,23 +23,26 @@ public class SessionJdbcAdapter implements SessionStore {
     public UUID save(Session session) {
         var sql = SessionSql.INSERT;
 
-        try {
-            var revokedAt = Optional.ofNullable(session.getRevokedAt())
-                    .map(Timestamp::from)
-                    .orElse(null);
+        var revokedAt = Optional.ofNullable(session.getRevokedAt())
+                .map(Timestamp::from)
+                .orElse(null);
 
-            return jdbcClient.sql(sql)
-                    .param("userId", session.getUserId())
-                    .param("device", session.getDevice())
-                    .param("createdAt", Timestamp.from(session.getCreatedAt()))
-                    .param("expiresAt", Timestamp.from(session.getExpiresAt()))
-                    .param("lastUsedAt", Timestamp.from(session.getLastUsedAt()))
-                    .param("revokedAt", revokedAt)
-                    .query(UUID.class)
-                    .single();
-        } catch (Exception e) {
-            log.error("Error: " + e.getMessage(), e);
-            throw e;
-        }
+        return jdbcClient.sql(sql)
+                .param("userId", session.getUserId())
+                .param("device", session.getDevice())
+                .param("createdAt", Timestamp.from(session.getCreatedAt()))
+                .param("expiresAt", Timestamp.from(session.getExpiresAt()))
+                .param("lastUsedAt", Timestamp.from(session.getLastUsedAt()))
+                .param("revokedAt", revokedAt)
+                .query(UUID.class)
+                .single();
+    }
+
+    @Override
+    public boolean tryRevoke(UUID sessionId, Instant revokedAt) {
+        return jdbcClient.sql(SessionSql.REVOKE)
+                .param("sessionId", sessionId)
+                .param("revokedAt", Timestamp.from(revokedAt))
+                .update() == 1;
     }
 }

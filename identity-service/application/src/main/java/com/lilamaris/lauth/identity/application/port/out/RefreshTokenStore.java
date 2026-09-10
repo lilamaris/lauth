@@ -8,5 +8,5 @@ import java.util.UUID;
 public interface RefreshTokenStore {
     UUID save(RefreshToken refreshToken);
 
-    boolean consume(UUID refreshTokenId, Instant consumedAt);
+    boolean tryConsume(UUID refreshTokenId, Instant consumedAt);
 }
