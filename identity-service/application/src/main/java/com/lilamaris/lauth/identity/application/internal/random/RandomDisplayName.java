@@ -16,7 +16,6 @@ public class RandomDisplayName implements RandomGenerator<String> {
 
     public RandomDisplayName(SecureRandom secureRandom, Path adjectiveSource, Path nounsSource) throws IOException {
         this.secureRandom = secureRandom;
-
         this.adjectives = loadWords(adjectiveSource);
         this.nouns = loadWords(nounsSource);
     }
@@ -40,10 +39,5 @@ public class RandomDisplayName implements RandomGenerator<String> {
         var n = secureRandom.nextInt(10_000);
 
         return "%s%s%04d".formatted(adjective, noun, n);
-    }
-
-    @Override
-    public String generate(int byteLength) {
-        throw new UnsupportedOperationException();
     }
 }

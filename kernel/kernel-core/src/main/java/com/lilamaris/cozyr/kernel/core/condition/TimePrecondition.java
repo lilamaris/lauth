@@ -42,6 +42,28 @@ public class TimePrecondition {
         return subject;
     }
 
+    public static Instant requireBetween(Instant subject, Instant lowerBound, Instant upperBound, String subjectName, String lowerBoundName, String upperBoundName) {
+        ObjectPrecondition.requireNonNull(subject, subjectName);
+        ObjectPrecondition.requireNonNull(lowerBound, lowerBoundName);
+        ObjectPrecondition.requireNonNull(upperBound, upperBoundName);
+        requireBefore(lowerBound, upperBound, lowerBoundName, upperBoundName);
+        if (!subject.isAfter(lowerBound) || !subject.isBefore(upperBound))
+            throw new IllegalArgumentException(subjectName + " must be between " + lowerBoundName + " and " + upperBoundName);
+
+        return subject;
+    }
+
+    public static Instant requireBetweenOrEqual(Instant subject, Instant lowerBound, Instant upperBound, String subjectName, String lowerBoundName, String upperBoundName) {
+        ObjectPrecondition.requireNonNull(subject, subjectName);
+        ObjectPrecondition.requireNonNull(lowerBound, lowerBoundName);
+        ObjectPrecondition.requireNonNull(upperBound, upperBoundName);
+        requireBeforeOrEqual(lowerBound, upperBound, lowerBoundName, upperBoundName);
+        if (subject.isBefore(lowerBound) || subject.isAfter(upperBound))
+            throw new IllegalArgumentException(subjectName + " must be between or equal " + lowerBoundName + " and " + upperBoundName);
+
+        return subject;
+    }
+
     public static LocalDate requireBefore(LocalDate subject, LocalDate upperBound, String subjectName, String upperBoundName) {
         ObjectPrecondition.requireNonNull(subject, subjectName);
         ObjectPrecondition.requireNonNull(upperBound, upperBoundName);

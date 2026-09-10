@@ -22,7 +22,9 @@ public class WebConfiguration {
     ErrorStatusRegistrar webErrorStatusRegistrar() {
         return new ErrorStatusRegistrar()
                 .type(IdentityServiceProgressType.AUTHENTICATION_FAILED).mapsTo(HttpStatus.UNAUTHORIZED)
-                .type(IdentityServiceProgressType.GRANT_FAILED).mapsTo(HttpStatus.INTERNAL_SERVER_ERROR);
+                .type(IdentityServiceProgressType.GRANT_FAILED).mapsTo(HttpStatus.INTERNAL_SERVER_ERROR)
+                .type(IdentityServiceProgressType.RESOURCE_EXPIRED).mapsTo(HttpStatus.UNAUTHORIZED)
+                .type(IdentityServiceProgressType.TOKEN_VERIFICATION_FAILED).mapsTo(HttpStatus.UNAUTHORIZED);
     }
 
     @Bean
