@@ -11,6 +11,7 @@ public class RefreshTokenSql {
 
     public static final String FIND_CONTEXT_BY_ID = """
             SELECT
+                s.user_id AS userId,
                 t.id AS refreshTokenId,
                 t.token_hash AS tokenHash,
                 t.expires_at AS tokenExpiresAt,
@@ -18,14 +19,9 @@ public class RefreshTokenSql {
                 s.id AS sessionId,
                 s.created_at AS sessionCreatedAt,
                 s.expires_at AS sessionExpiresAt,
-                s.revoked_at AS revokedAt,
-                u.id AS userId,
-                u.display_name AS displayName,
-                u.created_at AS userCreatedAt,
-                u.updated_at AS userUpdatedAt
+                s.revoked_at AS revokedAt
             FROM refresh_token t
             JOIN user_session s ON s.id = t.session_id
-            JOIN service_user u ON u.id = s.user_id
             WHERE t.id = :refreshTokenId
             """;
 

@@ -1,11 +1,14 @@
 package com.lilamaris.lauth.identity.application.internal.session;
 
 import com.lilamaris.lauth.identity.application.config.session.AccessTokenProperties;
+import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
 import com.lilamaris.lauth.identity.application.model.jwt.TokenMetadata;
 import com.lilamaris.lauth.identity.application.model.scope.ResourceScope;
 import com.lilamaris.lauth.identity.application.model.scope.ScopeCodec;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.out.UserGrantReader;
+import com.lilamaris.lauth.identity.application.port.out.UserPrincipalReader;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
@@ -21,8 +24,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AccessTokenService {
     private final AccessTokenProperties accessTokenProperties;
+    private final UserPrincipalReader userPrincipalReader;
     private final UserGrantReader userGrantReader;
     private final JwtEncoder jwtEncoder;
+
+
+    public TokenMetadata issue(UUID userId, UUID sessionId, Instant issuedAt) {
+        var user = userPrincipalReader.findPrincipalById(userId)
+                .orElseThrow(() -> new ApplicationException(IdentityServiceProgressCode.USER_NOT_FOUND));
+        return issue(user, sessionId, issuedAt);
+    }
 
     public TokenMetadata issue(UserPrincipal principal, UUID sessionId, Instant issuedAt) {
         var userId = principal.userId();

@@ -60,7 +60,7 @@ public class SessionTxService {
         if (!consumed) throw new ApplicationException(IdentityServiceProgressCode.REFRESH_TOKEN_ALREADY_CONSUMED);
 
         var newRefreshToken = refreshTokenService.issue(context.session(), now);
-        var newAccessToken = accessTokenService.issue(context.user(), context.session().sessionId(), now);
+        var newAccessToken = accessTokenService.issue(context.userId(), context.session().sessionId(), now);
 
         var data = TokenPair.of(newAccessToken, newRefreshToken);
 
