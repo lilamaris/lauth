@@ -1,7 +1,6 @@
 package com.lilamaris.lauth.identity.application.service;
 
 import com.lilamaris.lauth.identity.application.config.CredentialProperties;
-import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
 import com.lilamaris.lauth.identity.application.internal.event.PasswordResetRequested;
 import com.lilamaris.lauth.identity.application.model.opaque.OpaqueToken;
 import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenGenerator;
@@ -9,19 +8,19 @@ import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenHasher;
 import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenPurpose;
 import com.lilamaris.lauth.identity.application.port.in.RequestPasswordResetUseCase;
 import com.lilamaris.lauth.identity.application.port.in.command.RequestPasswordResetCommand;
-import com.lilamaris.lauth.identity.application.port.in.result.RequestPasswordResetResult;
 import com.lilamaris.lauth.identity.application.port.out.CredentialReader;
 import com.lilamaris.lauth.identity.application.port.out.PasswordResetTokenStore;
 import com.lilamaris.lauth.identity.domain.PasswordResetToken;
-import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.validation.annotation.Validated;
 
 import java.time.Clock;
 
 @Service
+@Validated
 @RequiredArgsConstructor
 public class RequestPasswordResetService implements RequestPasswordResetUseCase {
     private final CredentialProperties credentialProperties;
