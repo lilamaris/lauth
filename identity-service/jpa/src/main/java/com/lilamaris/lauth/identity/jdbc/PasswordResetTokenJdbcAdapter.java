@@ -45,4 +45,13 @@ public class PasswordResetTokenJdbcAdapter implements PasswordResetTokenStore {
                 .param("revokedAt", Timestamp.from(revokedAt))
                 .update() > 0;
     }
+
+    @Override
+    public boolean consume(UUID passwordResetTokenId, Instant consumedAt) {
+        var sql = PasswordResetTokenSql.CONSUME_TOKEN;
+        return jdbcClient.sql(sql)
+                .param("id", passwordResetTokenId)
+                .param("consumedAt", Timestamp.from(consumedAt))
+                .update() == 1;
+    }
 }

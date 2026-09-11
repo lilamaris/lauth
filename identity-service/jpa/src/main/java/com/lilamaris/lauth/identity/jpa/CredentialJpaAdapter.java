@@ -4,11 +4,9 @@ import com.lilamaris.lauth.identity.application.model.credential.CredentialReset
 import com.lilamaris.lauth.identity.application.port.out.CredentialReader;
 import com.lilamaris.lauth.identity.jpa.repository.CredentialRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.sql.model.PreparableMutationOperation;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

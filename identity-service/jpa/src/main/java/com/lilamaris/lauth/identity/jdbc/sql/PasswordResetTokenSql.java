@@ -31,4 +31,12 @@ public class PasswordResetTokenSql {
                 AND revoked_at IS NULL
                 AND consumed_at IS NULL
             """;
+
+    public static final String CONSUME_TOKEN = """
+            UPDATE password_reset_token
+            SET consumed_at = :consumedAt
+            WHERE id = :id
+                AND revoked_at IS NULL
+                AND consumed_at IS NULL
+            """;
 }
