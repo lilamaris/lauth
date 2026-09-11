@@ -5,15 +5,16 @@ import com.lilamaris.lauth.kernel.core.condition.StringPrecondition;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.validation.annotation.Validated;
 
 import java.util.UUID;
 
-@Validated
 public record UpdateHandleCommand(
         @NotNull UUID userId,
         @NotBlank
-        @Pattern(regexp = "^[a-z][a-z0-9_]{2,29}$")
+        @Pattern(
+                regexp = "^[a-z][a-z0-9_]{2,29}$",
+                message = "핸들은 영문 소문자로 시작하고 소문자, 숫자, 밑줄로 구성된 3~30자여야 합니다."
+        )
         String handle
 ) {
     public UpdateHandleCommand {

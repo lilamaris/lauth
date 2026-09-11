@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ProblemDetail;
 
 import java.util.Locale;
+import java.util.Map;
 
 @RequiredArgsConstructor
 public class ProblemDetailFactory {
@@ -43,6 +44,13 @@ public class ProblemDetailFactory {
         problem.setTitle(title);
         problem.setType(typeUri);
         problem.setProperty("code", code);
+
+        return problem;
+    }
+
+    public ProblemDetail from(ErrorDescriptor descriptor, Map<String, Object> additionalProperties) {
+        var problem = from(descriptor);
+        additionalProperties.forEach(problem::setProperty);
 
         return problem;
     }

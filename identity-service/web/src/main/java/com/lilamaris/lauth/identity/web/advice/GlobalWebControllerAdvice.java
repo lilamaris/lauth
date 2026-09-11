@@ -4,6 +4,9 @@ import com.lilamaris.lauth.kenel.web.response.error.ProblemDetailFactory;
 import com.lilamaris.lauth.kenel.web.response.error.StandardErrorDescriptor;
 import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.ElementKind;
+import jakarta.validation.Path;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ProblemDetail;
@@ -14,6 +17,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
+
+import java.util.Comparator;
+import java.util.Map;
 
 @Slf4j
 @RestControllerAdvice
@@ -39,6 +45,16 @@ public class GlobalWebControllerAdvice {
         return problemDetailFactory.from(StandardErrorDescriptor.BAD_REQUEST);
     }
 
+    private static String fieldName(Path path) {
+        var field = "";
+        for (var node : path) {
+            if (node.getKind() == ElementKind.PROPERTY || node.getKind() == ElementKind.PARAMETER) {
+                field = node.getName();
+            }
+        }
+        return field;
+    }
+
     @ExceptionHandler({IllegalStateException.class})
     public ProblemDetail handleIllegalState(IllegalStateException exception, HttpServletRequest request) {
         log.warn("Handle IllegalState. type={}, path={}, message={}", exception.getClass().getSimpleName(), request.getRequestURI(), exception.getMessage());
@@ -61,5 +77,20 @@ public class GlobalWebControllerAdvice {
     public ProblemDetail handleUnexpected(Exception exception, HttpServletRequest request) {
         log.warn("Handle Exception. type={}, path={}, message={}", exception.getClass().getSimpleName(), request.getRequestURI(), exception.getMessage());
         return problemDetailFactory.from(StandardErrorDescriptor.INTERNAL_SERVER_ERROR);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ProblemDetail handleConstraintViolation(ConstraintViolationException exception, HttpServletRequest request) {
+        log.warn("Handle ConstraintViolation. type={}, path={}, message={}", exception.getClass().getSimpleName(), request.getRequestURI(), exception.getMessage());
+
+        var errors = exception.getConstraintViolations().stream()
+                .map(violation -> new ValidationError(
+                        fieldName(violation.getPropertyPath()), violation.getMessage()))
+                .sorted(Comparator.comparing(ValidationError::field).thenComparing(ValidationError::message))
+                .toList();
+        return problemDetailFactory.from(StandardErrorDescriptor.BAD_REQUEST, Map.of("errors", errors));
+    }
+
+    public record ValidationError(String field, String message) {
     }
 }
