@@ -12,6 +12,8 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     CREDENTIAL_NOT_FOUND(ProcessReason.REJECTED, "credential", StandardProgressType.NOT_FOUND, "계정을 찾을 수 없습니다."),
     SESSION_NOT_FOUND(ProcessReason.REJECTED, "session", StandardProgressType.NOT_FOUND, "세션을 찾을 수 없습니다."),
 
+    INVALID_TOKEN(ProcessReason.REJECTED, "token", StandardProgressType.BAD_REQUEST, "유효하지 않은 토큰입니다."),
+
     SESSION_EXPIRED(ProcessReason.REJECTED, "session", IdentityServiceProgressType.RESOURCE_EXPIRED, "이미 만료된 세션입니다."),
     TOKEN_EXPIRED(ProcessReason.REJECTED, "token", IdentityServiceProgressType.RESOURCE_EXPIRED, "이미 만료된 토큰입니다."),
 
@@ -20,12 +22,14 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     SESSION_ALREADY_REVOKED(ProcessReason.REJECTED, "session", StandardProgressType.DUPLICATED, "이미 만료된 세션입니다."),
     TOKEN_REUSE_DETECTED(ProcessReason.REJECTED, "token", StandardProgressType.DUPLICATED, "이미 사용된 재발급 토큰입니다."),
     REFRESH_TOKEN_ALREADY_CONSUMED(ProcessReason.REJECTED, "refresh-token", StandardProgressType.DUPLICATED, "이미 사용된 재발급 토큰입니다."),
+    PASSWORD_RESET_TOKEN_ALREADY_CONSUMED(ProcessReason.REJECTED, "credential", StandardProgressType.DUPLICATED, "이미 사용된 재설정 토큰입니다."),
 
     AUTHENTICATION_FAILED(ProcessReason.REJECTED, "credential", IdentityServiceProgressType.AUTHENTICATION_FAILED, "인증 실패."),
     TOKEN_VERIFICATION_FAILED(ProcessReason.REJECTED, "token", IdentityServiceProgressType.TOKEN_VERIFICATION_FAILED, "토큰 검증 실패."),
 
     SCOPE_GRANT_FAILED(ProcessReason.FAILURE, "scope", IdentityServiceProgressType.GRANT_FAILED, "권한 부여 실패."),
-    EXECUTE_OUTCOME_VIOLATION(ProcessReason.FAILURE, "execute", StandardProgressType.FAILED, "요청 처리 결과가 없습니다.");
+    EXECUTE_OUTCOME_VIOLATION(ProcessReason.FAILURE, "execute", StandardProgressType.FAILED, "요청 처리 결과가 없습니다."),
+    PASSWORD_UPDATE_FAILED(ProcessReason.FAILURE, "credential", StandardProgressType.FAILED, "비밀번호 변경 실패.");
 
     private final ProcessReason reason;
     private final String resourceName;

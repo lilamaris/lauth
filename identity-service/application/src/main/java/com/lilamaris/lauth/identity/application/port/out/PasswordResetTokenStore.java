@@ -10,4 +10,6 @@ public interface PasswordResetTokenStore {
     Optional<UUID> save(PasswordResetToken passwordResetToken);
 
     boolean revokeOpenByCredentialId(UUID credentialId, Instant revokedAt);
+
+    boolean consume(UUID passwordResetTokenId, Instant consumedAt);
 }
