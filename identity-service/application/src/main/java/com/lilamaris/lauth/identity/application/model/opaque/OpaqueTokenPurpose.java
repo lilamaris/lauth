@@ -6,7 +6,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum OpaqueTokenPurpose {
-    REFRESH_TOKEN("refresh-token");
+    REFRESH_TOKEN("refresh-token"),
+    PASSWORD_RESET_TOKEN("password-reset-token");
 
     private final String canonicalName;
 }

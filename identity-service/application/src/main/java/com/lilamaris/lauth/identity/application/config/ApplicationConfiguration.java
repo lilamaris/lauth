@@ -38,7 +38,8 @@ import java.util.List;
         PolicyProperties.class,
         SessionProperties.class,
         AccessTokenProperties.class,
-        RefreshTokenProperties.class
+        RefreshTokenProperties.class,
+        CredentialProperties.class
 })
 public class ApplicationConfiguration {
     @Bean
