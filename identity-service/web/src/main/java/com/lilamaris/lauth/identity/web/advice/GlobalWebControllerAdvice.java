@@ -75,7 +75,7 @@ public class GlobalWebControllerAdvice {
 
     @ExceptionHandler({Exception.class})
     public ProblemDetail handleUnexpected(Exception exception, HttpServletRequest request) {
-        log.warn("Handle Exception. type={}, path={}, message={}", exception.getClass().getSimpleName(), request.getRequestURI(), exception.getMessage());
+        log.error("Handle Exception. type={}, path={}, message={}", exception.getClass().getSimpleName(), request.getRequestURI(), exception.getMessage(), exception);
         return problemDetailFactory.from(StandardErrorDescriptor.INTERNAL_SERVER_ERROR);
     }
 
