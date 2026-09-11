@@ -76,6 +76,7 @@ public class GlobalSecurityConfiguration {
                         .requestMatchers(jacksonSignInProcessingFilter.getRequestMatcher()).permitAll()
                         .requestMatchers("/api/v1/session/**").authenticated()
                         .requestMatchers("/api/v1/user/**").authenticated()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
                         .anyRequest().denyAll()
                 )
 

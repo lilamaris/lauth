@@ -27,7 +27,7 @@ lauth:
   security:
     permits:
       - /.well-known/**
-      - /api/v1/auth/**
+      - /v3/api-docs
 
 server:
   port: ${PORT:8081}
