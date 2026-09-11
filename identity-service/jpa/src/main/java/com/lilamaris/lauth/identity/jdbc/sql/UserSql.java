@@ -24,6 +24,13 @@ public class UserSql {
             WHERE u.id = :userId
             """;
 
+    public static final String UPDATE_DISPLAY_NAME = """
+            UPDATE service_user
+            SET display_name = :displayName,
+                updated_at = :updatedAt
+            WHERE id = :userId
+            """;
+
     public static final String UPDATE_HANDLE = """
             UPDATE service_user
             SET handle = :handle,

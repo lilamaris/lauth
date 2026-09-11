@@ -1,8 +1,11 @@
 package com.lilamaris.lauth.identity.web.controller;
 
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
+import com.lilamaris.lauth.identity.application.port.in.UpdateDisplayNameUseCase;
 import com.lilamaris.lauth.identity.application.port.in.UpdateHandleUseCase;
+import com.lilamaris.lauth.identity.application.port.in.result.UpdateDisplayNameResult;
 import com.lilamaris.lauth.identity.application.port.in.result.UpdateHandleResult;
+import com.lilamaris.lauth.identity.web.controller.request.UpdateDisplayNameRequest;
 import com.lilamaris.lauth.identity.web.controller.request.UpdateHandleRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class UserController {
     private final UpdateHandleUseCase updateHandleUseCase;
+    private final UpdateDisplayNameUseCase updateDisplayNameUseCase;
+
+    @PreAuthorize("hasAuthority('SCOPE_user.write')")
+    @PatchMapping("/display-name")
+    public ResponseEntity<UpdateDisplayNameResult> updateDisplayName(
+            @Valid @RequestBody UpdateDisplayNameRequest body,
+            @AuthenticationPrincipal(expression = "user") UserPrincipal user
+    ) {
+        var userId = user.userId();
+        var command = body.toCommand(userId);
+        var result = updateDisplayNameUseCase.update(command);
+        return ResponseEntity.ok(result);
+    }
 
     @PreAuthorize("hasAuthority('SCOPE_user.write')")
     @PatchMapping("/handle")
