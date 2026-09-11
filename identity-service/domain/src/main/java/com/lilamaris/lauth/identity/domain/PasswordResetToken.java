@@ -58,4 +58,8 @@ public class PasswordResetToken {
     public static PasswordResetToken of(UUID credentialId, String tokenHash, Instant issuedAt, Instant expiresAt) {
         return new PasswordResetToken(credentialId, tokenHash, issuedAt, expiresAt, null, null);
     }
+
+    public boolean isAvailable(Instant now) {
+        return revokedAt == null && consumedAt == null && now.isBefore(expiresAt);
+    }
 }
