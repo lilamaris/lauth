@@ -23,6 +23,9 @@ public class User {
     @Column(insertable = false, updatable = false)
     private UUID id;
 
+    @Column(name = "handle")
+    private String handle;
+
     @Column(name = "display_name")
     private String displayName;
 
