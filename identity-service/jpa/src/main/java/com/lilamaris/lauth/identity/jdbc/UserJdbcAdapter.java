@@ -4,6 +4,7 @@ import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.out.UserMetadataStore;
 import com.lilamaris.lauth.identity.application.port.out.UserPrincipalReader;
 import com.lilamaris.lauth.identity.application.port.out.UserStore;
+import com.lilamaris.lauth.identity.application.port.out.status.UpdateDisplayNameStatus;
 import com.lilamaris.lauth.identity.application.port.out.status.UpdateHandleStatus;
 import com.lilamaris.lauth.identity.domain.User;
 import com.lilamaris.lauth.identity.jdbc.row.UserRow;
@@ -59,5 +60,17 @@ public class UserJdbcAdapter implements UserStore, UserPrincipalReader, UserMeta
         } catch (DuplicateKeyException e) {
             return UpdateHandleStatus.HANDLE_ALREADY_IN_USE;
         }
+    }
+
+    @Override
+    public UpdateDisplayNameStatus updateDisplayName(UUID userId, String displayName, Instant updatedAt) {
+        var sql = UserSql.UPDATE_DISPLAY_NAME;
+        var updated = jdbcClient.sql(sql)
+                .param("userId", userId)
+                .param("displayName", displayName)
+                .param("updatedAt", Timestamp.from(updatedAt))
+                .update() == 1;
+
+        return updated ? UpdateDisplayNameStatus.UPDATED : UpdateDisplayNameStatus.USER_NOT_FOUND;
     }
 }
