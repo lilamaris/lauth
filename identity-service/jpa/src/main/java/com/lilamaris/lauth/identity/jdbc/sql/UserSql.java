@@ -23,4 +23,11 @@ public class UserSql {
             FROM service_user u
             WHERE u.id = :userId
             """;
+
+    public static final String UPDATE_HANDLE = """
+            UPDATE service_user
+            SET handle = :handle,
+                updated_at = :updatedAt
+            WHERE id = :userId
+            """;
 }
