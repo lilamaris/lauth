@@ -16,6 +16,7 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     TOKEN_EXPIRED(ProcessReason.REJECTED, "token", IdentityServiceProgressType.RESOURCE_EXPIRED, "이미 만료된 토큰입니다."),
 
     EMAIL_DUPLICATED(ProcessReason.REJECTED, "credential", StandardProgressType.DUPLICATED, "이미 사용 중인 이메일입니다."),
+    USER_HANDLE_ALREADY_IN_USE(ProcessReason.REJECTED, "user", StandardProgressType.DUPLICATED, "이미 사용 중인 핸들입니다."),
     SESSION_ALREADY_REVOKED(ProcessReason.REJECTED, "session", StandardProgressType.DUPLICATED, "이미 만료된 세션입니다."),
     TOKEN_REUSE_DETECTED(ProcessReason.REJECTED, "token", StandardProgressType.DUPLICATED, "이미 사용된 재발급 토큰입니다."),
     REFRESH_TOKEN_ALREADY_CONSUMED(ProcessReason.REJECTED, "refresh-token", StandardProgressType.DUPLICATED, "이미 사용된 재발급 토큰입니다."),
@@ -23,7 +24,6 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     AUTHENTICATION_FAILED(ProcessReason.REJECTED, "credential", IdentityServiceProgressType.AUTHENTICATION_FAILED, "인증 실패."),
     TOKEN_VERIFICATION_FAILED(ProcessReason.REJECTED, "token", IdentityServiceProgressType.TOKEN_VERIFICATION_FAILED, "토큰 검증 실패."),
 
-    USER_METADATA_UPDATE_FAILED(ProcessReason.FAILURE, "user", StandardProgressType.FAILED, "사용자 정보 변경에 실패했습니다."),
     SCOPE_GRANT_FAILED(ProcessReason.FAILURE, "scope", IdentityServiceProgressType.GRANT_FAILED, "권한 부여 실패."),
     EXECUTE_OUTCOME_VIOLATION(ProcessReason.FAILURE, "execute", StandardProgressType.FAILED, "요청 처리 결과가 없습니다.");
 
