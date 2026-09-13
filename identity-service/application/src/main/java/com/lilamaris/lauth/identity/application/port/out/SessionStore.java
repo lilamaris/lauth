@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public interface SessionStore {
-    UUID save(Session session);
+    void save(Session session);
 
     boolean tryRevoke(UUID sessionId, Instant revokedAt);
 }

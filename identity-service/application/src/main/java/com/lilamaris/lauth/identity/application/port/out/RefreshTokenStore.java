@@ -6,7 +6,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 public interface RefreshTokenStore {
-    UUID save(RefreshToken refreshToken);
+    void save(RefreshToken refreshToken);
 
     boolean tryConsume(UUID refreshTokenId, Instant consumedAt);
 }

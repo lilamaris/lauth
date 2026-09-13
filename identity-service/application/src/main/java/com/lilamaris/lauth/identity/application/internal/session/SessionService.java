@@ -1,6 +1,7 @@
 package com.lilamaris.lauth.identity.application.internal.session;
 
 import com.lilamaris.lauth.identity.application.config.session.SessionProperties;
+import com.lilamaris.lauth.identity.application.internal.id.IdGenerator;
 import com.lilamaris.lauth.identity.application.model.session.SessionContext;
 import com.lilamaris.lauth.identity.application.port.out.SessionStore;
 import com.lilamaris.lauth.identity.domain.Session;
@@ -15,11 +16,13 @@ import java.util.UUID;
 public class SessionService {
     private final SessionProperties sessionProperties;
     private final SessionStore sessionStore;
+    private final IdGenerator<UUID> idGenerator;
 
     public SessionContext create(UUID userId, Instant createdAt) {
         var expiresAt = createdAt.plus(sessionProperties.expiration());
-        var session = Session.of(userId, "unknown", createdAt, expiresAt);
-        var sessionId = sessionStore.save(session);
+        var sessionId = idGenerator.generate();
+        var session = Session.of(sessionId, userId, "unknown", createdAt, expiresAt);
+        sessionStore.save(session);
 
         return SessionContext.of(sessionId, session.getCreatedAt(), session.getExpiresAt(), session.getRevokedAt());
     }

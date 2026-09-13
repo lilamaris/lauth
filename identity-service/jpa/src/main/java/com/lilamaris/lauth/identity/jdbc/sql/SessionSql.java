@@ -9,6 +9,7 @@ public class SessionSql {
 
     public static final String INSERT = """
             INSERT INTO user_session (
+                id,
                 user_id,
                 device,
                 created_at,
@@ -16,6 +17,7 @@ public class SessionSql {
                 last_used_at,
                 revoked_at
             ) VALUES (
+                :id,
                 :userId,
                 :device,
                 :createdAt,
@@ -23,6 +25,5 @@ public class SessionSql {
                 :lastUsedAt,
                 :revokedAt
             )
-            RETURNING id
             """;
 }
