@@ -20,7 +20,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class PasswordResetToken {
     @Id
-    @Column(insertable = false, updatable = false)
     private UUID id;
 
     @Column(name = "credential_id", nullable = false)
@@ -44,7 +43,8 @@ public class PasswordResetToken {
     @Column(name = "consumed_at")
     private Instant consumedAt;
 
-    private PasswordResetToken(UUID credentialId, String clientId, String tokenHash, Instant issuedAt, Instant expiresAt, Instant revokedAt, Instant consumedAt) {
+    private PasswordResetToken(UUID id, UUID credentialId, String clientId, String tokenHash, Instant issuedAt, Instant expiresAt, Instant revokedAt, Instant consumedAt) {
+        this.id = ObjectPrecondition.requireNonNull(id, "id");
         this.credentialId = ObjectPrecondition.requireNonNull(credentialId, "userId");
         this.clientId = StringPrecondition.requireNonBlank(clientId, "clientId");
         this.tokenHash = StringPrecondition.requireNonBlank(tokenHash, "tokenHash");
@@ -59,8 +59,8 @@ public class PasswordResetToken {
         }
     }
 
-    public static PasswordResetToken of(UUID credentialId, String clientId, String tokenHash, Instant issuedAt, Instant expiresAt) {
-        return new PasswordResetToken(credentialId, clientId, tokenHash, issuedAt, expiresAt, null, null);
+    public static PasswordResetToken of(UUID id, UUID credentialId, String clientId, String tokenHash, Instant issuedAt, Instant expiresAt) {
+        return new PasswordResetToken(id, credentialId, clientId, tokenHash, issuedAt, expiresAt, null, null);
     }
 
     public boolean isAvailable(Instant now) {

@@ -18,7 +18,7 @@ public class PasswordResetTokenJdbcAdapter implements PasswordResetTokenStore {
     private final JdbcClient jdbcClient;
 
     @Override
-    public Optional<UUID> save(PasswordResetToken passwordResetToken) {
+    public boolean save(PasswordResetToken passwordResetToken) {
         var sql = PasswordResetTokenSql.INSERT;
         var revokedAt = Optional.ofNullable(passwordResetToken.getRevokedAt())
                 .map(Timestamp::from)
@@ -27,6 +27,7 @@ public class PasswordResetTokenJdbcAdapter implements PasswordResetTokenStore {
                 .map(Timestamp::from)
                 .orElse(null);
         return jdbcClient.sql(sql)
+                .param("id", passwordResetToken.getId())
                 .param("credentialId", passwordResetToken.getCredentialId())
                 .param("clientId", passwordResetToken.getClientId())
                 .param("tokenHash", passwordResetToken.getTokenHash())
@@ -34,8 +35,7 @@ public class PasswordResetTokenJdbcAdapter implements PasswordResetTokenStore {
                 .param("expiresAt", Timestamp.from(passwordResetToken.getExpiresAt()))
                 .param("revokedAt", revokedAt)
                 .param("consumedAt", consumedAt)
-                .query(UUID.class)
-                .optional();
+                .update() == 1;
     }
 
     @Override
