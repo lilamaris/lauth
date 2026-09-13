@@ -68,6 +68,15 @@ spring:
       properties:
         spring.json.add.type.headers: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: lilamaris.dev@gmail.com
+    password: ${SPRING_MAIL_PASSWORD}
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.starttls.enable: true
+
 management:
   endpoints:
     web:

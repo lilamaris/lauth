@@ -6,7 +6,6 @@ import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenHasher;
 import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenPurpose;
 import com.lilamaris.lauth.identity.application.port.in.ResetPasswordUseCase;
 import com.lilamaris.lauth.identity.application.port.in.command.ResetPasswordCommand;
-import com.lilamaris.lauth.identity.application.port.out.CredentialReader;
 import com.lilamaris.lauth.identity.application.port.out.CredentialStore;
 import com.lilamaris.lauth.identity.application.port.out.PasswordResetTokenReader;
 import com.lilamaris.lauth.identity.application.port.out.PasswordResetTokenStore;

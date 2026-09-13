@@ -28,6 +28,7 @@ public class PasswordResetTokenJdbcAdapter implements PasswordResetTokenStore {
                 .orElse(null);
         return jdbcClient.sql(sql)
                 .param("credentialId", passwordResetToken.getCredentialId())
+                .param("clientId", passwordResetToken.getClientId())
                 .param("tokenHash", passwordResetToken.getTokenHash())
                 .param("issuedAt", Timestamp.from(passwordResetToken.getIssuedAt()))
                 .param("expiresAt", Timestamp.from(passwordResetToken.getExpiresAt()))

@@ -4,6 +4,7 @@ public class PasswordResetTokenSql {
     public static final String INSERT = """
             INSERT INTO password_reset_token (
                 credential_id,
+                client_id,
                 token_hash,
                 issued_at,
                 expires_at,
@@ -11,6 +12,7 @@ public class PasswordResetTokenSql {
                 consumed_at
             ) VALUES (
                 :credentialId,
+                :clientId,
                 :tokenHash,
                 :issuedAt,
                 :expiresAt,

@@ -1,16 +1,17 @@
 package com.lilamaris.lauth.identity.application.service;
 
 import com.lilamaris.lauth.identity.application.config.CredentialProperties;
-import com.lilamaris.lauth.identity.application.internal.event.PasswordResetRequested;
-import com.lilamaris.lauth.identity.application.model.opaque.OpaqueToken;
-import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenGenerator;
-import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenHasher;
-import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenPurpose;
+import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
+import com.lilamaris.lauth.identity.application.internal.client.ClientRegistrationRegistry;
+import com.lilamaris.lauth.identity.application.model.event.PasswordResetRequested;
+import com.lilamaris.lauth.identity.application.model.opaque.*;
+import com.lilamaris.lauth.identity.application.model.password.PasswordResetUriFactory;
 import com.lilamaris.lauth.identity.application.port.in.RequestPasswordResetUseCase;
 import com.lilamaris.lauth.identity.application.port.in.command.RequestPasswordResetCommand;
 import com.lilamaris.lauth.identity.application.port.out.CredentialReader;
 import com.lilamaris.lauth.identity.application.port.out.PasswordResetTokenStore;
 import com.lilamaris.lauth.identity.domain.PasswordResetToken;
+import com.lilamaris.lauth.kernel.application.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,8 @@ public class RequestPasswordResetService implements RequestPasswordResetUseCase 
     private final PasswordResetTokenStore passwordResetTokenStore;
     private final OpaqueTokenGenerator opaqueTokenGenerator;
     private final OpaqueTokenHasher opaqueTokenHasher;
+    private final ClientRegistrationRegistry clientRegistrationRegistry;
+    private final PasswordResetUriFactory passwordResetUriFactory;
     private final ApplicationEventPublisher eventPublisher;
     private final Clock clock;
 
@@ -39,16 +42,21 @@ public class RequestPasswordResetService implements RequestPasswordResetUseCase 
         var now = clock.instant();
         passwordResetTokenStore.revokeOpenByCredentialId(context.credentialId(), now);
 
-        var token = opaqueTokenGenerator.generate();
-        var tokenHash = opaqueTokenHasher.hash(OpaqueTokenPurpose.PASSWORD_RESET_TOKEN, token);
+        var tokenValue = opaqueTokenGenerator.generate();
+        var tokenHash = opaqueTokenHasher.hash(OpaqueTokenPurpose.PASSWORD_RESET_TOKEN, tokenValue);
+
+        var clientId = command.clientId();
+        var clientRegistration = clientRegistrationRegistry.get(clientId);
+        if (clientRegistration == null) throw new ApplicationException(IdentityServiceProgressCode.CLIENT_NOT_FOUND);
 
         var expiresAt = now.plus(credentialProperties.passwordResetTokenExpiration());
-        var passwordResetToken = PasswordResetToken.of(context.credentialId(), tokenHash, now, expiresAt);
+        var passwordResetToken = PasswordResetToken.of(context.credentialId(), clientId, tokenHash, now, expiresAt);
         var passwordResetTokenId = passwordResetTokenStore.save(passwordResetToken).orElse(null);
         if (passwordResetTokenId == null) return;
 
-        var opaqueToken = OpaqueToken.of(passwordResetTokenId.toString(), token);
-        eventPublisher.publishEvent(new PasswordResetRequested(command.email(), opaqueToken, expiresAt));
+        var opaqueToken = OpaqueToken.of(passwordResetTokenId.toString(), tokenValue);
+        var passwordResetUri = passwordResetUriFactory.create(clientRegistration.passwordResetUri(), opaqueToken);
+        eventPublisher.publishEvent(new PasswordResetRequested(command.email(), passwordResetUri, expiresAt));
 
         // 이 OpaqueToken은 해당 요청 응답에 담아서 보내는게 아님. 실제 credential에 기록된 이메일 등으로 발송해서 요청 당사자가 소유한 Credential인지 증명해야함
         // opaqueToken을 쿼리 스트링으로 포함한 특정 API URI을 메일로 발송해야함. 이건 어떻게 해야하지?

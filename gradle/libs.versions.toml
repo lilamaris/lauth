@@ -77,5 +77,8 @@ spring-boot-starter-opentelemetry = { module = "org.springframework.boot:spring-
 datasource-micrometer-spring-boot = { module = "net.ttddyy.observation:datasource-micrometer-spring-boot", version.ref = "datasource-micrometer" }
 datasource-micrometer-opentelemetry = { module = "net.ttddyy.observation:datasource-micrometer-opentelemetry", version.ref = "datasource-micrometer" }
 
+## Spring Boot - Mail
+spring-boot-starter-mail = { module = "org.springframework.boot:spring-boot-starter-mail" }
+
 [plugins]
 spring-boot = { id = "org.springframework.boot", version.ref = "spring-boot" }

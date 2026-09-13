@@ -1,5 +1,6 @@
 package com.lilamaris.lauth.identity.application.internal.event;
 
+import com.lilamaris.lauth.identity.application.model.event.PasswordResetRequested;
 import com.lilamaris.lauth.identity.application.port.out.PasswordResetMailSender;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -13,6 +14,6 @@ public class PasswordResetListener {
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handle(PasswordResetRequested event) {
-        mailSender.send(event.email(), event.opaqueToken(), event.expiresAt());
+        mailSender.send(event.email(), event.passwordResetUri(), event.expiresAt());
     }
 }

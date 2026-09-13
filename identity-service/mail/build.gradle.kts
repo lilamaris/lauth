@@ -9,4 +9,6 @@ dependencies {
 
     implementation(project(":kernel:kernel-core"))
     testImplementation(project(":kernel:kernel-test"))
+
+    implementation(libs.spring.boot.starter.mail)
 }

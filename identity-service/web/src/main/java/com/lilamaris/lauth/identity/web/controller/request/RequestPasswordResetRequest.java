@@ -4,9 +4,10 @@ import com.lilamaris.lauth.identity.application.port.in.command.RequestPasswordR
 import jakarta.validation.constraints.NotBlank;
 
 public record RequestPasswordResetRequest(
-        @NotBlank String email
+        @NotBlank String email,
+        @NotBlank String clientId
 ) {
     public RequestPasswordResetCommand toCommand() {
-        return RequestPasswordResetCommand.of(email);
+        return RequestPasswordResetCommand.of(email, clientId);
     }
 }

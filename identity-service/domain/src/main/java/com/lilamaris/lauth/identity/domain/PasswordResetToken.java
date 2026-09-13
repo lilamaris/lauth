@@ -26,6 +26,9 @@ public class PasswordResetToken {
     @Column(name = "credential_id", nullable = false)
     private UUID credentialId;
 
+    @Column(name = "client_id", nullable = false)
+    private String clientId;
+
     @Column(name = "token_hash", nullable = false)
     private String tokenHash;
 
@@ -41,8 +44,9 @@ public class PasswordResetToken {
     @Column(name = "consumed_at")
     private Instant consumedAt;
 
-    private PasswordResetToken(UUID credentialId, String tokenHash, Instant issuedAt, Instant expiresAt, Instant revokedAt, Instant consumedAt) {
+    private PasswordResetToken(UUID credentialId, String clientId, String tokenHash, Instant issuedAt, Instant expiresAt, Instant revokedAt, Instant consumedAt) {
         this.credentialId = ObjectPrecondition.requireNonNull(credentialId, "userId");
+        this.clientId = StringPrecondition.requireNonBlank(clientId, "clientId");
         this.tokenHash = StringPrecondition.requireNonBlank(tokenHash, "tokenHash");
         this.issuedAt = ObjectPrecondition.requireNonNull(issuedAt, "issuedAt");
         this.expiresAt = TimePrecondition.requireAfterOrEqual(expiresAt, issuedAt, "expiresAt", "issuedAt");
@@ -55,8 +59,8 @@ public class PasswordResetToken {
         }
     }
 
-    public static PasswordResetToken of(UUID credentialId, String tokenHash, Instant issuedAt, Instant expiresAt) {
-        return new PasswordResetToken(credentialId, tokenHash, issuedAt, expiresAt, null, null);
+    public static PasswordResetToken of(UUID credentialId, String clientId, String tokenHash, Instant issuedAt, Instant expiresAt) {
+        return new PasswordResetToken(credentialId, clientId, tokenHash, issuedAt, expiresAt, null, null);
     }
 
     public boolean isAvailable(Instant now) {
