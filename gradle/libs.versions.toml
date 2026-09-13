@@ -9,6 +9,7 @@ spring-dependency-management = "1.1.7"
 springdoc-openapi = "3.0.2"
 datasource-micrometer = "2.2.1"
 bouncy-castle = "1.85.2"
+uuid-creator = "6.1.1"
 
 [libraries]
 ## Base
@@ -23,6 +24,9 @@ junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher
 mockito-bom = { module = "org.mockito:mockito-bom", version.ref = "mockito" }
 mockito-core = { module = "org.mockito:mockito-core" }
 mockito-junit-jupiter = { module = "org.mockito:mockito-junit-jupiter" }
+
+## Base - UUID Generator
+uuid-generator = { module = "com.github.f4b6a3:uuid-creator", version.ref = "uuid-creator" }
 
 ## Base - Bouncy Castle
 bc-jdk18on-bom = { module = "org.bouncycastle:bc-jdk18on-bom", version.ref = "bouncy-castle" }

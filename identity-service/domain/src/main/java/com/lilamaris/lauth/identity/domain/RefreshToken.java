@@ -20,7 +20,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class RefreshToken {
     @Id
-    @Column(insertable = false, updatable = false)
     private UUID id;
 
     @Column(name = "session_id", nullable = false)
@@ -38,7 +37,8 @@ public class RefreshToken {
     @Column(name = "consumed_at")
     private Instant consumedAt;
 
-    private RefreshToken(UUID sessionId, String tokenHash, Instant issuedAt, Instant expiresAt, Instant consumedAt) {
+    private RefreshToken(UUID id, UUID sessionId, String tokenHash, Instant issuedAt, Instant expiresAt, Instant consumedAt) {
+        this.id = ObjectPrecondition.requireNonNull(id, "id");
         this.sessionId = ObjectPrecondition.requireNonNull(sessionId, "sessionId");
         this.tokenHash = StringPrecondition.requireNonBlank(tokenHash, "tokenHash");
         this.issuedAt = ObjectPrecondition.requireNonNull(issuedAt, "issuedAt");
@@ -49,7 +49,7 @@ public class RefreshToken {
         }
     }
 
-    public static RefreshToken of(UUID sessionId, String tokenHash, Instant issuedAt, Instant expiresAt) {
-        return new RefreshToken(sessionId, tokenHash, issuedAt, expiresAt, null);
+    public static RefreshToken of(UUID id, UUID sessionId, String tokenHash, Instant issuedAt, Instant expiresAt) {
+        return new RefreshToken(id, sessionId, tokenHash, issuedAt, expiresAt, null);
     }
 }

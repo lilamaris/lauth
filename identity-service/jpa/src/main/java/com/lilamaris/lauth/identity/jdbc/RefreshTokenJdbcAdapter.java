@@ -21,21 +21,21 @@ public class RefreshTokenJdbcAdapter implements RefreshTokenStore, RefreshTokenC
     private final JdbcClient jdbcClient;
 
     @Override
-    public UUID save(RefreshToken refreshToken) {
+    public void save(RefreshToken refreshToken) {
         var sql = RefreshTokenSql.INSERT;
 
         var consumedAt = Optional.ofNullable(refreshToken.getConsumedAt())
                 .map(Timestamp::from)
                 .orElse(null);
 
-        return jdbcClient.sql(sql)
+        jdbcClient.sql(sql)
+                .param("id", refreshToken.getId())
                 .param("sessionId", refreshToken.getSessionId())
                 .param("tokenHash", refreshToken.getTokenHash())
                 .param("issuedAt", Timestamp.from(refreshToken.getIssuedAt()))
                 .param("expiresAt", Timestamp.from(refreshToken.getExpiresAt()))
                 .param("consumedAt", consumedAt)
-                .query(UUID.class)
-                .single();
+                .update();
     }
 
     @Override

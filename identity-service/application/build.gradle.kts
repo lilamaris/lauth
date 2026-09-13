@@ -17,4 +17,6 @@ dependencies {
     implementation(platform(libs.bc.jdk18on.bom))
     implementation(libs.bcprov.jdk18on)
     implementation(libs.bcpkix.jdk18on)
+
+    implementation(libs.uuid.generator)
 }

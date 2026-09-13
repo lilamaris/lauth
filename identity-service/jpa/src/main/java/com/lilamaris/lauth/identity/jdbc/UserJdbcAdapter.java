@@ -36,15 +36,15 @@ public class UserJdbcAdapter implements UserStore, UserPrincipalReader, UserMeta
     }
 
     @Override
-    public UUID save(User user) {
+    public void save(User user) {
         var sql = UserSql.INSERT;
 
-        return jdbcClient.sql(sql)
+        jdbcClient.sql(sql)
+                .param("id", user.getId())
                 .param("displayName", user.getDisplayName())
                 .param("createdAt", Timestamp.from(user.getCreatedAt()))
                 .param("updatedAt", Timestamp.from(user.getUpdatedAt()))
-                .query(UUID.class)
-                .single();
+                .update();
     }
 
     @Override

@@ -20,22 +20,22 @@ public class SessionJdbcAdapter implements SessionStore {
     private final JdbcClient jdbcClient;
 
     @Override
-    public UUID save(Session session) {
+    public void save(Session session) {
         var sql = SessionSql.INSERT;
 
         var revokedAt = Optional.ofNullable(session.getRevokedAt())
                 .map(Timestamp::from)
                 .orElse(null);
 
-        return jdbcClient.sql(sql)
+        jdbcClient.sql(sql)
+                .param("id", session.getId())
                 .param("userId", session.getUserId())
                 .param("device", session.getDevice())
                 .param("createdAt", Timestamp.from(session.getCreatedAt()))
                 .param("expiresAt", Timestamp.from(session.getExpiresAt()))
                 .param("lastUsedAt", Timestamp.from(session.getLastUsedAt()))
                 .param("revokedAt", revokedAt)
-                .query(UUID.class)
-                .single();
+                .update();
     }
 
     @Override

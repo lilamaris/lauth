@@ -3,6 +3,7 @@ package com.lilamaris.lauth.identity.jdbc.sql;
 public class PasswordResetTokenSql {
     public static final String INSERT = """
             INSERT INTO password_reset_token (
+                id,
                 credential_id,
                 client_id,
                 token_hash,
@@ -11,6 +12,7 @@ public class PasswordResetTokenSql {
                 revoked_at,
                 consumed_at
             ) VALUES (
+                :id,
                 :credentialId,
                 :clientId,
                 :tokenHash,
@@ -23,7 +25,6 @@ public class PasswordResetTokenSql {
             WHERE consumed_at IS NULL
                 AND revoked_at IS NULL
             DO NOTHING
-            RETURNING id
             """;
 
     public static final String REVOKE_OPEN_TOKEN = """

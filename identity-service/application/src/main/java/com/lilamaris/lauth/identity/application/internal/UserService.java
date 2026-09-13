@@ -1,6 +1,7 @@
 package com.lilamaris.lauth.identity.application.internal;
 
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
+import com.lilamaris.lauth.identity.application.internal.id.IdGenerator;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.out.ScopeReader;
 import com.lilamaris.lauth.identity.application.port.out.UserGrantStore;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,10 +22,12 @@ public class UserService {
     private final UserStore userStore;
     private final UserGrantStore userGrantStore;
     private final ScopeReader scopeReader;
+    private final IdGenerator<UUID> idGenerator;
 
     public UserPrincipal createNewUser(String displayName, Instant createdAt) {
-        var user = User.of(displayName, createdAt);
-        var userId = userStore.save(user);
+        var userId = idGenerator.generate();
+        var user = User.of(userId, displayName, createdAt);
+        userStore.save(user);
 
         var scopes = scopeReader.findAll();
         var scopeIds = scopes.stream().map(Scope::getId).collect(Collectors.toUnmodifiableSet());

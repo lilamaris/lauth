@@ -3,6 +3,7 @@ package com.lilamaris.lauth.identity.application.config;
 import com.lilamaris.lauth.identity.application.config.session.AccessTokenProperties;
 import com.lilamaris.lauth.identity.application.config.session.RefreshTokenProperties;
 import com.lilamaris.lauth.identity.application.config.session.SessionProperties;
+import com.lilamaris.lauth.identity.application.internal.id.UUIDv7Generator;
 import com.lilamaris.lauth.identity.application.internal.jwks.JWKBuilder;
 import com.lilamaris.lauth.identity.application.internal.jwks.JWKSRegistry;
 import com.lilamaris.lauth.identity.application.internal.random.RandomDisplayName;
@@ -98,5 +99,10 @@ public class ApplicationConfiguration {
     @Bean
     OpaqueTokenHasher opaqueTokenHasher(ApplicationProperties properties) {
         return new HmacSha256paqueTokenHasher(properties.hasherKey().getBytes(StandardCharsets.UTF_8));
+    }
+
+    @Bean
+    UUIDv7Generator uuiDv7Generator() {
+        return new UUIDv7Generator();
     }
 }

@@ -3,15 +3,16 @@ package com.lilamaris.lauth.identity.jdbc.sql;
 public class UserSql {
     public static final String INSERT = """
             INSERT INTO service_user (
+                id,
                 display_name,
                 created_at,
                 updated_at
             ) VALUES (
+                :id,
                 :displayName,
                 :createdAt,
                 :updatedAt
             )
-            RETURNING id
             """;
 
     public static final String FIND_PRINCIPAL_BY_ID = """

@@ -2,6 +2,7 @@ package com.lilamaris.lauth.identity.application.internal.session;
 
 import com.lilamaris.lauth.identity.application.config.session.RefreshTokenProperties;
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
+import com.lilamaris.lauth.identity.application.internal.id.IdGenerator;
 import com.lilamaris.lauth.identity.application.model.jwt.TokenMetadata;
 import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenCodec;
 import com.lilamaris.lauth.identity.application.model.opaque.OpaqueTokenGenerator;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.time.Instant;
+import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
@@ -24,6 +26,7 @@ public class RefreshTokenService {
     private final RefreshTokenStore refreshTokenStore;
     private final OpaqueTokenHasher opaqueTokenHasher;
     private final OpaqueTokenGenerator opaqueTokenGenerator;
+    private final IdGenerator<UUID> idGenerator;
 
     public TokenMetadata issue(SessionContext context, Instant issuedAt) {
         ObjectPrecondition.requireNonNull(context, "context");
@@ -37,8 +40,9 @@ public class RefreshTokenService {
         var tokenValue = opaqueTokenGenerator.generate();
         var tokenHash = opaqueTokenHasher.hash(OpaqueTokenPurpose.REFRESH_TOKEN, tokenValue);
 
-        var refreshToken = RefreshToken.of(context.sessionId(), tokenHash, issuedAt, actualExpiresAt);
-        var refreshTokenId = refreshTokenStore.save(refreshToken);
+        var refreshTokenId = idGenerator.generate();
+        var refreshToken = RefreshToken.of(refreshTokenId, context.sessionId(), tokenHash, issuedAt, actualExpiresAt);
+        refreshTokenStore.save(refreshToken);
 
         var encoded = OpaqueTokenCodec.encode(refreshTokenId, tokenValue);
 

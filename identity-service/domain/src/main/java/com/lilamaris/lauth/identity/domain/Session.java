@@ -20,7 +20,6 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Session {
     @Id
-    @Column(insertable = false, updatable = false)
     private UUID id;
 
     @Column(name = "user_id", nullable = false)
@@ -41,7 +40,8 @@ public class Session {
     @Column(name = "revoked_at")
     private Instant revokedAt;
 
-    private Session(UUID userId, String device, Instant createdAt, Instant lastUsedAt, Instant expiresAt, Instant revokedAt) {
+    private Session(UUID id, UUID userId, String device, Instant createdAt, Instant lastUsedAt, Instant expiresAt, Instant revokedAt) {
+        this.id = ObjectPrecondition.requireNonNull(id, "id");
         this.userId = ObjectPrecondition.requireNonNull(userId, "userId");
         this.device = StringPrecondition.requireNonBlank(device, "device");
         this.createdAt = ObjectPrecondition.requireNonNull(createdAt, "createdAt");
@@ -58,7 +58,7 @@ public class Session {
         this.lastUsedAt = TimePrecondition.requireBetweenOrEqual(lastUsedAt, createdAt, effectedAt, "lastUsedAt", "createdAt", effectedName);
     }
 
-    public static Session of(UUID userId, String device, Instant createdAt, Instant expiresAt) {
-        return new Session(userId, device, createdAt, createdAt, expiresAt, null);
+    public static Session of(UUID id, UUID userId, String device, Instant createdAt, Instant expiresAt) {
+        return new Session(id, userId, device, createdAt, createdAt, expiresAt, null);
     }
 }

@@ -20,13 +20,12 @@ import java.util.UUID;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User {
     @Id
-    @Column(insertable = false, updatable = false)
     private UUID id;
 
     @Column(name = "handle")
     private String handle;
 
-    @Column(name = "display_name")
+    @Column(name = "display_name", nullable = false)
     private String displayName;
 
     @Column(name = "created_at", nullable = false)
@@ -35,13 +34,14 @@ public class User {
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;
 
-    private User(String displayName, Instant createdAt, Instant updatedAt) {
+    private User(UUID id, String displayName, Instant createdAt, Instant updatedAt) {
+        this.id = ObjectPrecondition.requireNonNull(id, "id");
         this.displayName = StringPrecondition.requireNonBlank(displayName, "displayName");
         this.createdAt = ObjectPrecondition.requireNonNull(createdAt, "createdAt");
         this.updatedAt = TimePrecondition.requireAfterOrEqual(updatedAt, createdAt, "updatedAt", "createdAt");
     }
 
-    public static User of(String displayName, Instant createdAt) {
-        return new User(displayName, createdAt, createdAt);
+    public static User of(UUID id, String displayName, Instant createdAt) {
+        return new User(id, displayName, createdAt, createdAt);
     }
 }

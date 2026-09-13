@@ -3,6 +3,7 @@ package com.lilamaris.lauth.identity.application.service;
 import com.lilamaris.lauth.identity.application.config.CredentialProperties;
 import com.lilamaris.lauth.identity.application.exception.IdentityServiceProgressCode;
 import com.lilamaris.lauth.identity.application.internal.client.ClientRegistrationRegistry;
+import com.lilamaris.lauth.identity.application.internal.id.IdGenerator;
 import com.lilamaris.lauth.identity.application.model.event.PasswordResetRequested;
 import com.lilamaris.lauth.identity.application.model.opaque.*;
 import com.lilamaris.lauth.identity.application.model.password.PasswordResetUriFactory;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Clock;
+import java.util.UUID;
 
 @Service
 @Validated
@@ -32,6 +34,7 @@ public class RequestPasswordResetService implements RequestPasswordResetUseCase 
     private final ClientRegistrationRegistry clientRegistrationRegistry;
     private final PasswordResetUriFactory passwordResetUriFactory;
     private final ApplicationEventPublisher eventPublisher;
+    private final IdGenerator<UUID> idGenerator;
     private final Clock clock;
 
     @Transactional
@@ -50,9 +53,10 @@ public class RequestPasswordResetService implements RequestPasswordResetUseCase 
         if (clientRegistration == null) throw new ApplicationException(IdentityServiceProgressCode.CLIENT_NOT_FOUND);
 
         var expiresAt = now.plus(credentialProperties.passwordResetTokenExpiration());
-        var passwordResetToken = PasswordResetToken.of(context.credentialId(), clientId, tokenHash, now, expiresAt);
-        var passwordResetTokenId = passwordResetTokenStore.save(passwordResetToken).orElse(null);
-        if (passwordResetTokenId == null) return;
+        var passwordResetTokenId = idGenerator.generate();
+        var passwordResetToken = PasswordResetToken.of(passwordResetTokenId, context.credentialId(), clientId, tokenHash, now, expiresAt);
+        var saved = passwordResetTokenStore.save(passwordResetToken);
+        if (!saved) return;
 
         var opaqueToken = OpaqueToken.of(passwordResetTokenId.toString(), tokenValue);
         var passwordResetUri = passwordResetUriFactory.create(clientRegistration.passwordResetUri(), opaqueToken);
