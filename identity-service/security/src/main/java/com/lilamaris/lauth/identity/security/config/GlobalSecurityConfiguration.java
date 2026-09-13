@@ -8,6 +8,8 @@ import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationFailure
 import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationSuccessHandler;
 import com.lilamaris.lauth.identity.security.method.credential.provider.CredentialSignInProvider;
 import com.lilamaris.lauth.identity.security.method.credential.request.JacksonSignInProcessingFilter;
+import com.lilamaris.lauth.identity.security.method.federated.service.CustomOAuth2UserService;
+import com.lilamaris.lauth.identity.security.method.federated.service.CustomOidcUserService;
 import com.lilamaris.lauth.identity.security.principal.CurrentUserPrincipal;
 import com.lilamaris.lauth.kenel.web.response.ServletResponseWriter;
 import com.lilamaris.lauth.kenel.web.response.error.ProblemDetailFactory;
@@ -50,6 +52,10 @@ public class GlobalSecurityConfiguration {
             UrlBasedCorsConfigurationSource corsConfigurationSource,
             GlobalAccessDeniedHandler globalAccessDeniedHandler,
             GlobalAuthenticationEntryPoint globalAuthenticationEntryPoint,
+            GlobalAuthenticationSuccessHandler globalAuthenticationSuccessHandler,
+            GlobalAuthenticationFailureHandler globalAuthenticationFailureHandler,
+            CustomOAuth2UserService customOAuth2UserService,
+            CustomOidcUserService customOidcUserService,
             JacksonSignInProcessingFilter jacksonSignInProcessingFilter,
             JwtDecoder jwtDecoder,
             JwtAuthenticationConverter jwtAuthenticationConverter,
@@ -77,7 +83,17 @@ public class GlobalSecurityConfiguration {
                         .requestMatchers("/api/v1/session/**").authenticated()
                         .requestMatchers("/api/v1/user/**").authenticated()
                         .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/oauth2/**", "/login/oauth2/**").permitAll()
                         .anyRequest().denyAll()
+                )
+
+                .oauth2Login(customizer -> customizer
+                        .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
+                                .oidcUserService(customOidcUserService)
+                                .userService(customOAuth2UserService)
+                        )
+                        .successHandler(globalAuthenticationSuccessHandler)
+                        .failureHandler(globalAuthenticationFailureHandler)
                 )
 
                 .oauth2ResourceServer(customizer -> customizer

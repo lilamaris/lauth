@@ -3,6 +3,7 @@ package com.lilamaris.lauth.identity.security.handler;
 import com.lilamaris.lauth.identity.application.model.jwt.TokenPair;
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
 import com.lilamaris.lauth.identity.application.port.in.LoginSessionUseCase;
+import com.lilamaris.lauth.identity.security.method.federated.resolver.FederatedUserPrincipal;
 import com.lilamaris.lauth.kenel.web.response.ServletResponseWriter;
 import com.lilamaris.lauth.kenel.web.response.error.ProblemDetailFactory;
 import com.lilamaris.lauth.kenel.web.response.error.StandardErrorDescriptor;
@@ -31,7 +32,13 @@ public class GlobalAuthenticationSuccessHandler implements AuthenticationSuccess
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
-        if (!(authentication.getPrincipal() instanceof UserPrincipal principal)) return;
+        if (authentication.getPrincipal() == null) return;
+
+        var principal = switch (authentication.getPrincipal()) {
+            case UserPrincipal user -> user;
+            case FederatedUserPrincipal federated -> federated.user();
+            default -> throw new IllegalStateException("Unsupported principal");
+        };
 
         ProblemDetail problem = null;
         TokenPair tokenPair = null;
