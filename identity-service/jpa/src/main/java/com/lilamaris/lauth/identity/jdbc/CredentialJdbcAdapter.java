@@ -42,6 +42,16 @@ public class CredentialJdbcAdapter implements CredentialStore, CredentialAuthRea
     }
 
     @Override
+    public boolean updatePasswordHash(UUID id, String passwordHash, Instant updatedAt) {
+        var sql = CredentialSql.UPDATE_PASSWORD_HASH;
+        return jdbcClient.sql(sql)
+                .param("id", id)
+                .param("passwordHash", passwordHash)
+                .param("updatedAt", Timestamp.from(updatedAt))
+                .update() == 1;
+    }
+
+    @Override
     public Optional<CredentialChallenge> findByEmail(String email) {
         var sql = CredentialSql.FIND_CHALLENGE_BY_EMAIL;
 

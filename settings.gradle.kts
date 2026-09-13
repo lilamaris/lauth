@@ -29,3 +29,5 @@ include("identity-service:fileIO")
 include("identity-service:web")
 include("identity-service:security")
 include("identity-service:redis")
+
+include("identity-service:mail")

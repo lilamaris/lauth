@@ -17,6 +17,13 @@ public class CredentialSql {
             )
             """;
 
+    public static final String UPDATE_PASSWORD_HASH = """
+            UPDATE credential
+            SET password_hash = :passwordHash,
+                updated_at = :updatedAt
+            WHERE id = :id
+            """;
+
     public static final String FIND_CHALLENGE_BY_EMAIL = """
             SELECT
                 u.id AS userId,
