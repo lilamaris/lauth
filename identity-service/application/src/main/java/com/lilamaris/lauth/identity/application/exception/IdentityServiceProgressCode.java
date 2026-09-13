@@ -11,6 +11,7 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     USER_NOT_FOUND(ProcessReason.REJECTED, "user", StandardProgressType.NOT_FOUND, "사용자를 찾을 수 없습니다."),
     CREDENTIAL_NOT_FOUND(ProcessReason.REJECTED, "credential", StandardProgressType.NOT_FOUND, "계정을 찾을 수 없습니다."),
     SESSION_NOT_FOUND(ProcessReason.REJECTED, "session", StandardProgressType.NOT_FOUND, "세션을 찾을 수 없습니다."),
+    CLIENT_NOT_FOUND(ProcessReason.REJECTED, "client", StandardProgressType.NOT_FOUND, "등록된 client id가 아닙니다."),
 
     INVALID_TOKEN(ProcessReason.REJECTED, "token", StandardProgressType.BAD_REQUEST, "유효하지 않은 토큰입니다."),
 

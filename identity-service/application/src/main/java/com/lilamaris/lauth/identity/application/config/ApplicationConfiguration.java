@@ -39,7 +39,8 @@ import java.util.List;
         SessionProperties.class,
         AccessTokenProperties.class,
         RefreshTokenProperties.class,
-        CredentialProperties.class
+        CredentialProperties.class,
+        ClientRegistrationProperties.class
 })
 public class ApplicationConfiguration {
     @Bean

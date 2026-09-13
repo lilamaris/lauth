@@ -24,6 +24,9 @@ lauth:
       - resource: user
         action: WRITE
         description: Can write user data
+  clients:
+    cozyr:
+      password-reset-uri: https://cozyr.lilamaris.kr/password/reset
   security:
     permits:
       - /.well-known/**
