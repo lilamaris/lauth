@@ -24,13 +24,15 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     TOKEN_REUSE_DETECTED(ProcessReason.REJECTED, "token", StandardProgressType.DUPLICATED, "이미 사용된 재발급 토큰입니다."),
     REFRESH_TOKEN_ALREADY_CONSUMED(ProcessReason.REJECTED, "refresh-token", StandardProgressType.DUPLICATED, "이미 사용된 재발급 토큰입니다."),
     PASSWORD_RESET_TOKEN_ALREADY_CONSUMED(ProcessReason.REJECTED, "credential", StandardProgressType.DUPLICATED, "이미 사용된 재설정 토큰입니다."),
+    FEDERATED_ACCOUNT_ALREADY_EXISTS(ProcessReason.REJECTED, "account", StandardProgressType.DUPLICATED, "이미 연결된 외부 인증입니다."),
 
     AUTHENTICATION_FAILED(ProcessReason.REJECTED, "credential", IdentityServiceProgressType.AUTHENTICATION_FAILED, "인증 실패."),
     TOKEN_VERIFICATION_FAILED(ProcessReason.REJECTED, "token", IdentityServiceProgressType.TOKEN_VERIFICATION_FAILED, "토큰 검증 실패."),
 
     SCOPE_GRANT_FAILED(ProcessReason.FAILURE, "scope", IdentityServiceProgressType.GRANT_FAILED, "권한 부여 실패."),
     EXECUTE_OUTCOME_VIOLATION(ProcessReason.FAILURE, "execute", StandardProgressType.FAILED, "요청 처리 결과가 없습니다."),
-    PASSWORD_UPDATE_FAILED(ProcessReason.FAILURE, "credential", StandardProgressType.FAILED, "비밀번호 변경 실패.");
+    PASSWORD_UPDATE_FAILED(ProcessReason.FAILURE, "credential", StandardProgressType.FAILED, "비밀번호 변경 실패."),
+    FEDERATED_ACCOUNT_REGISTRATION_FAILED(ProcessReason.FAILURE, "account", StandardProgressType.FAILED, "외부 인증 연결에 실패했습니다.");
 
     private final ProcessReason reason;
     private final String resourceName;
