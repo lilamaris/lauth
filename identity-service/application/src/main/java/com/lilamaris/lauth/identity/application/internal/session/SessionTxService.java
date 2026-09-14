@@ -39,7 +39,7 @@ public class SessionTxService {
 
         var now = clock.instant();
         if (context.session().revokedAt() != null)
-            throw new ApplicationException(IdentityServiceProgressCode.SESSION_ALREADY_REVOKED);
+            throw new ApplicationException(IdentityServiceProgressCode.INVALID_SESSION);
 
         var matched = opaqueTokenHasher.matches(OpaqueTokenPurpose.REFRESH_TOKEN, opaqueToken.value(), context.tokenHash());
         if (!matched)

@@ -33,7 +33,7 @@ public class RefreshTokenService {
         ObjectPrecondition.requireNonNull(issuedAt, "issuedAt");
 
         if (context.revokedAt() != null)
-            throw new ApplicationException(IdentityServiceProgressCode.SESSION_ALREADY_REVOKED);
+            throw new ApplicationException(IdentityServiceProgressCode.INVALID_SESSION);
 
         var tokenExpiresAt = issuedAt.plus(refreshTokenProperties.expiration());
         var actualExpiresAt = context.expiresAt().isAfter(tokenExpiresAt) ? tokenExpiresAt : context.expiresAt();

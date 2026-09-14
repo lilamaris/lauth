@@ -13,6 +13,7 @@ public enum IdentityServiceProgressCode implements ApplicationProgressCode {
     SESSION_NOT_FOUND(ProcessReason.REJECTED, "session", StandardProgressType.NOT_FOUND, "세션을 찾을 수 없습니다."),
     CLIENT_NOT_FOUND(ProcessReason.REJECTED, "client", StandardProgressType.NOT_FOUND, "등록된 client id가 아닙니다."),
 
+    INVALID_SESSION(ProcessReason.REJECTED, "session", StandardProgressType.BAD_REQUEST, "유효하지 않은 세션입니다."),
     INVALID_TOKEN(ProcessReason.REJECTED, "token", StandardProgressType.BAD_REQUEST, "유효하지 않은 토큰입니다."),
 
     SESSION_EXPIRED(ProcessReason.REJECTED, "session", IdentityServiceProgressType.RESOURCE_EXPIRED, "이미 만료된 세션입니다."),
