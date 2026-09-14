@@ -57,7 +57,11 @@ public class SessionTxService {
             throw new ApplicationException(IdentityServiceProgressCode.TOKEN_EXPIRED);
 
         var consumed = refreshTokenStore.tryConsume(context.refreshTokenId(), now);
-        if (!consumed) throw new ApplicationException(IdentityServiceProgressCode.REFRESH_TOKEN_ALREADY_CONSUMED);
+        if (!consumed) {
+            var revoked = sessionStore.tryRevoke(context.session().sessionId(), now);
+            if (!revoked) throw new ApplicationException(IdentityServiceProgressCode.SESSION_ALREADY_REVOKED);
+            return ExecuteOutcome.failure(IdentityServiceProgressCode.TOKEN_REUSE_DETECTED);
+        }
 
         var newRefreshToken = refreshTokenService.issue(context.session(), now);
         var newAccessToken = accessTokenService.issue(context.userId(), context.session().sessionId(), now);
