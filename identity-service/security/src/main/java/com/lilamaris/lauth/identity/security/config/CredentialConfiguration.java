@@ -2,7 +2,6 @@ package com.lilamaris.lauth.identity.security.config;
 
 import com.lilamaris.lauth.identity.application.port.in.AuthenticateCredentialUseCase;
 import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationFailureHandler;
-import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationSuccessHandler;
 import com.lilamaris.lauth.identity.security.method.credential.provider.CredentialSignInProvider;
 import com.lilamaris.lauth.identity.security.method.credential.request.JacksonSignInProcessingFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -23,7 +22,6 @@ public class CredentialConfiguration {
     JacksonSignInProcessingFilter jacksonSignInProcessingFilter(
             CredentialProperties properties,
             AuthenticationManager authenticationManager,
-            GlobalAuthenticationSuccessHandler successHandler,
             GlobalAuthenticationFailureHandler failureHandler,
             ObjectMapper objectMapper
     ) {

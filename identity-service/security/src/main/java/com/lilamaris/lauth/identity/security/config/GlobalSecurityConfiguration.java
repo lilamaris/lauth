@@ -1,28 +1,20 @@
 package com.lilamaris.lauth.identity.security.config;
 
 import com.lilamaris.lauth.identity.application.model.user.UserPrincipal;
-import com.lilamaris.lauth.identity.application.port.in.LoginSessionUseCase;
 import com.lilamaris.lauth.identity.security.handler.GlobalAccessDeniedHandler;
 import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationEntryPoint;
 import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationFailureHandler;
-import com.lilamaris.lauth.identity.security.handler.GlobalAuthenticationSuccessHandler;
 import com.lilamaris.lauth.identity.security.method.credential.provider.CredentialSignInProvider;
 import com.lilamaris.lauth.identity.security.method.credential.request.JacksonSignInProcessingFilter;
-import com.lilamaris.lauth.identity.security.method.federated.resolver.FederatedUserPrincipal;
 import com.lilamaris.lauth.identity.security.method.federated.service.CustomOAuth2UserService;
 import com.lilamaris.lauth.identity.security.method.federated.service.CustomOidcUserService;
 import com.lilamaris.lauth.identity.security.principal.CurrentUserPrincipal;
 import com.lilamaris.lauth.kenel.web.response.ServletResponseWriter;
 import com.lilamaris.lauth.kenel.web.response.error.ProblemDetailFactory;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.source.JWKSource;
-import com.nimbusds.jose.proc.SecurityContext;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.config.Customizer;
@@ -36,20 +28,15 @@ import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
 import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.settings.ClientSettings;
-import org.springframework.security.oauth2.server.authorization.token.JwtEncodingContext;
-import org.springframework.security.oauth2.server.authorization.token.OAuth2TokenCustomizer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextRepository;
-import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import tools.jackson.databind.ObjectMapper;
@@ -58,57 +45,10 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableMethodSecurity
 @EnableConfigurationProperties({GlobalSecurityProperties.class, GlobalCorsProperties.class})
 public class GlobalSecurityConfiguration {
-    @Bean
-    JWKSource<SecurityContext> jwkSource(JWK activeJWK) {
-        return (jwkSelector, context) -> jwkSelector.select(new JWKSet(activeJWK));
-    }
-
-    @Bean
-    OAuth2TokenCustomizer<JwtEncodingContext> jwtEncodingContextOAuth2TokenCustomizer() {
-        return context -> {
-            if (!OAuth2TokenType.ACCESS_TOKEN.equals(context.getTokenType())) return;
-            if (context.getPrincipal() == null) return;
-
-            UserPrincipal principal = switch (context.getPrincipal().getPrincipal()) {
-                case UserPrincipal user -> user;
-                case FederatedUserPrincipal federated -> federated.user();
-                case null, default -> null;
-            };
-
-            if (principal == null) return;
-
-            var claims = context.getClaims();
-
-            claims.claim("display", principal.displayName());
-        };
-    }
-
-    @Bean
-    @Order(1)
-    SecurityFilterChain authorizationServerFilterChain(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity
-                .oauth2AuthorizationServer(configurer -> {
-                    httpSecurity.securityMatcher(configurer.getEndpointsMatcher());
-                    configurer
-                            .oidc(Customizer.withDefaults());
-                })
-                .authorizeHttpRequests(customizer ->
-                        customizer
-                                .anyRequest().authenticated()
-                )
-                .exceptionHandling(exceptions -> exceptions
-                        .defaultAuthenticationEntryPointFor(
-                                new LoginUrlAuthenticationEntryPoint("/login"),
-                                new MediaTypeRequestMatcher(MediaType.TEXT_HTML)
-                        )
-                );
-
-        return httpSecurity.build();
-    }
 
     @Bean
     @Order(2)
@@ -240,11 +180,6 @@ public class GlobalSecurityConfiguration {
         });
 
         return converter;
-    }
-
-    @Bean
-    GlobalAuthenticationSuccessHandler globalAuthenticationSuccessHandler(LoginSessionUseCase loginSessionUseCase, com.lilamaris.lauth.kenel.web.response.ServletResponseWriter servletResponseWriter, ProblemDetailFactory problemDetailFactory) {
-        return new GlobalAuthenticationSuccessHandler(loginSessionUseCase, servletResponseWriter, problemDetailFactory);
     }
 
     @Bean
