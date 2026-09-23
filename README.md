@@ -50,6 +50,18 @@ Scope는 `{resource}.{action}`과 같은 형식을 사용하며 예시는 아래
 사용자와 Scope 사이 관계는 `UserGrant`가 관리하며,
 발급된 Access Token에는 사용자에게 허용된 Scope가 포함됩니다.
 
+OAuth2 Authorization Server가 발급하는 JWT의 리소스 Scope는 클라이언트 허용 범위,
+사용자가 승인한 범위, 발급 시점의 `UserGrant`의 교집합입니다.
+`openid`, `profile`은 승인된 경우 유지하며, ID Token에는 리소스 권한을 추가하지 않습니다.
+현재 `oidc-client`는 `user.read`, `user.write`를 요청할 수 있습니다.
+인가 요청에 `scope=openid profile user.read user.write`처럼 필요한 Scope를 지정해야 합니다.
+
+Refresh Token으로 재발급할 때도 DB 권한을 다시 조회하므로 회수된 권한은 새 JWT에서 제외됩니다.
+이미 발급된 JWT에는 권한 변경이 소급 반영되지 않습니다.
+이 필터링은 JWT의 `scope` claim에 적용되며, OAuth2 동의 기록과 토큰 응답의 `scope`는
+기존 승인 범위를 나타낼 수 있습니다. API 권한 검사는 검증된 JWT를 기준으로 수행합니다
+(예: `hasAuthority('SCOPE_user.write')`).
+
 ### Session & Refresh Token
 
 로그인 한 번을 하나의 `Session`으로 취급합니다.
