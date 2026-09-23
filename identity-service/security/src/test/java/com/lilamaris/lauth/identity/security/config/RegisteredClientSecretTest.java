@@ -13,6 +13,7 @@ class RegisteredClientSecretTest {
         var client = repository.findByClientId("oidc-client");
 
         assertThat(client).isNotNull();
+        assertThat(client.getScopes()).containsExactlyInAnyOrder("openid", "profile", "user.read", "user.write");
         assertThat(client.getClientSecret()).startsWith("$argon2id$");
         assertThat(encoder.matches("secret", client.getClientSecret())).isTrue();
         assertThat(encoder.matches("wrong-secret", client.getClientSecret())).isFalse();

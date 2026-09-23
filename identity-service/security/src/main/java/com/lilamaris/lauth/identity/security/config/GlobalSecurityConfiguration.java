@@ -122,16 +122,13 @@ public class GlobalSecurityConfiguration {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
-                .redirectUri("http://127.0.0.1:8080/login/oauth2/code/oidc-client")
-                // Apidog 공식 브라우저 콜백 — SAS 는 완전 일치 검증이라 Apidog UI 가 안내하는
-                // URL 과 1:1 로 같아야 한다. (점: oauth2-browser.callback.html 은 Apidog SPA
-                // fallback 으로 빠져 callback 을 못 받는 흔한 실수 — 하이픈이 정답)
                 .redirectUri("https://app.apidog.com/oauth2-browser-callback.html")
-                // Apidog 신규 문서의 공식 콜백도 함께 등록 (버전별 사용 URL 이 다를 수 있음)
-                .redirectUri("https://oauth.apidog.com/v1/browser-callback")
+                .redirectUri("http://localhost:5174/auth/callback")
                 .postLogoutRedirectUri("http://127.0.0.1:8080/")
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
+                .scope("user.read")
+                .scope("user.write")
                 .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
 
