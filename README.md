@@ -116,3 +116,28 @@ Refresh Token, 비밀번호 재설정 토큰 등 일종의 일회성 Credential�
 
 하나의 Credential에 동시에 여러 개의 유효한 재설정 토큰이 존재하지 않도록 제한하고,
 새로운 재설정 요청이 생성되면 기존에 활성화 되어있던 토큰을 폐기합니다.
+
+## Run the Service
+
+저장소 루트에서 아래 명령을 실행하면 Identity Service와 PostgreSQL을 시작합니다.
+서비스는 `http://localhost:8090`에서 접근할 수 있습니다.
+
+```bash
+bash script/start.sh identity-service/launcher
+```
+
+스크립트는 다음 순서로 실행합니다.
+
+1. Gradle로 `identity-service/launcher`를 빌드합니다.
+2. 호스트 아키텍처에 맞는 Docker 이미지를 만들고 로컬 엔진에 불러옵니다.
+3. 임시 디렉터리를 만들고 RSA 키와 닉네임 사전 파일을 준비합니다.
+4. Docker Compose로 PostgreSQL과 Identity Service를 시작합니다. 서비스는 PostgreSQL이 준비된 뒤 연결합니다.
+5. `Ctrl+C`를 한 번 눌러 스크립트를 종료하면 컨테이너, PostgreSQL 볼륨, 임시 파일을 정리합니다.
+
+스크립트가 지원하는 옵션과 대상 형식은 아래 명령으로 확인할 수 있습니다.
+
+```bash
+bash script/start.sh --help
+```
+
+`--tag`, `--namespace`, `--dry-run` 옵션과 빌드 대상 예시를 출력합니다.
