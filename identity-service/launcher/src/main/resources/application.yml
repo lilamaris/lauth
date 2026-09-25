@@ -112,6 +112,9 @@ management:
   tracing:
     sampling:
       probability: 0.1
+    export:
+      otlp:
+        enabled: ${OTLP_ENABLED:false}
   otlp:
     metrics:
       export:
