@@ -33,7 +33,7 @@ lauth:
       - /v3/api-docs
 
 server:
-  port: ${PORT:8081}
+  port: ${PORT:8090}
 
 spring:
   application:

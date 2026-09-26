@@ -123,7 +123,7 @@ Refresh Token, 비밀번호 재설정 토큰 등 일종의 일회성 Credential�
 서비스는 `http://localhost:8090`에서 접근할 수 있습니다.
 
 ```bash
-bash script/start.sh identity-service/launcher
+bash script/run-demo.sh
 ```
 
 스크립트는 다음 순서로 실행합니다.
@@ -132,12 +132,12 @@ bash script/start.sh identity-service/launcher
 2. 호스트 아키텍처에 맞는 Docker 이미지를 만들고 로컬 엔진에 불러옵니다.
 3. 임시 디렉터리를 만들고 RSA 키와 닉네임 사전 파일을 준비합니다.
 4. Docker Compose로 PostgreSQL과 Identity Service를 시작합니다. 서비스는 PostgreSQL이 준비된 뒤 연결합니다.
-5. `Ctrl+C`를 한 번 눌러 스크립트를 종료하면 컨테이너, PostgreSQL 볼륨, 임시 파일을 정리합니다.
+5. 서비스는 스크립트가 종료된 뒤에도 계속 실행됩니다. 실행이 끝나면 생성된 컨테이너와 임시 파일 목록을 출력합니다.
 
-스크립트가 지원하는 옵션과 대상 형식은 아래 명령으로 확인할 수 있습니다.
+기존 데모 상태가 있으면 `run-demo.sh`가 먼저 `cleanup-demo.sh`를 실행해 이전 환경을 정리하고 다시 시작합니다. 직접 정리하려면 아래 명령을 실행합니다.
 
 ```bash
-bash script/start.sh --help
+bash script/cleanup-demo.sh
 ```
 
-`--tag`, `--namespace`, `--dry-run` 옵션과 빌드 대상 예시를 출력합니다.
+`cleanup-demo.sh`는 데모용 Docker Compose 컨테이너를 중지하고 제거하며, PostgreSQL 데이터를 담은 Compose 볼륨과 임시 키·닉네임 사전 파일, 임시 디렉터리 경로를 기록한 상태 파일을 삭제합니다. 빌드한 Docker 이미지는 유지됩니다.

@@ -1,6 +1,6 @@
 services:
   lauth:
-    image: localhost/${LAUTH_IMAGE_NAMESPACE:-lauth}/identity-service-launcher:${LAUTH_IMAGE_TAG:-local}
+    image: ${LAUTH_REGISTRY_HOST}/${LAUTH_IMAGE_NAMESPACE:-lauth}/identity-service/launcher:${LAUTH_IMAGE_TAG:-local}
     environment:
       LAUTH_HASHER_KEY: ${LAUTH_HASHER_KEY:-0123456789abcdef0123456789abcdef}
       DB_URL: jdbc:postgresql://postgres:5432/lauth
@@ -26,16 +26,16 @@ services:
       postgres:
         condition: service_healthy
     ports:
-      - "127.0.0.1:8090:8081"
+      - "127.0.0.1:8090:8090"
     volumes:
       - type: bind
-        source: ${LAUTH_KEYS_DIR:?start.sh must provide a temporary key directory}
+        source: ${LAUTH_KEYS_DIR:?run-demo.sh must provide a temporary key directory}
         target: /opt/lauth/secrets
         read_only: true
         bind:
           create_host_path: false
       - type: bind
-        source: ${LAUTH_DATA_DIR:?start.sh must provide a temporary data directory}
+        source: ${LAUTH_DATA_DIR:?run-demo.sh must provide a temporary data directory}
         target: /opt/lauth/data
         read_only: true
         bind:
