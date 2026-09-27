@@ -119,8 +119,8 @@ Refresh Token, 비밀번호 재설정 토큰 등 일종의 일회성 Credential�
 
 ## Run the Service
 
-저장소 루트에서 아래 명령을 실행하면 Identity Service와 PostgreSQL을 시작합니다.
-서비스는 `http://localhost:8090`에서 접근할 수 있습니다.
+저장소 루트에서 아래 명령을 실행하면 Identity Service, PostgreSQL, [lauth-client](https://github.com/lilamaris/lauth-client)를 시작합니다.
+프론트는 `http://localhost:5174`, Identity Service는 `http://localhost:8090`에서 접근할 수 있습니다.
 
 ```bash
 bash script/run-demo.sh
@@ -131,8 +131,11 @@ bash script/run-demo.sh
 1. Gradle로 `identity-service/launcher`를 빌드합니다.
 2. 호스트 아키텍처에 맞는 Docker 이미지를 만들고 로컬 엔진에 불러옵니다.
 3. 임시 디렉터리를 만들고 RSA 키와 닉네임 사전 파일을 준비합니다.
-4. Docker Compose로 PostgreSQL과 Identity Service를 시작합니다. 서비스는 PostgreSQL이 준비된 뒤 연결합니다.
-5. 서비스는 스크립트가 종료된 뒤에도 계속 실행됩니다. 실행이 끝나면 생성된 컨테이너와 임시 파일 목록을 출력합니다.
+4. 프론트 저장소를 임시 디렉터리에 복제하고 해당 저장소의 Dockerfile로 이미지를 빌드합니다. 이미지 태그에는 프론트 커밋 해시를 사용합니다.
+5. Docker Compose로 PostgreSQL, Identity Service, 프론트를 시작합니다. Identity Service는 PostgreSQL이 준비된 뒤 연결합니다.
+6. 서비스는 스크립트가 종료된 뒤에도 계속 실행됩니다. 실행이 끝나면 생성된 컨테이너, 이미지, 임시 파일 목록을 출력합니다.
+
+데모에서는 프론트 서버와 Identity Service가 네트워크를 공유해 모두 `localhost:8090`을 인증 서버 주소로 사용합니다. API 요청은 프론트 서버에서 보내고 브라우저의 인증 요청은 페이지 이동으로 처리하므로 별도의 CORS 설정이 필요하지 않습니다. Google과 GitHub 로그인에는 실제 OAuth 공급자 인증 정보가 필요합니다.
 
 기존 데모 상태가 있으면 `run-demo.sh`가 먼저 `cleanup-demo.sh`를 실행해 이전 환경을 정리하고 다시 시작합니다. 직접 정리하려면 아래 명령을 실행합니다.
 
@@ -140,4 +143,4 @@ bash script/run-demo.sh
 bash script/cleanup-demo.sh
 ```
 
-`cleanup-demo.sh`는 데모용 Docker Compose 컨테이너를 중지하고 제거하며, PostgreSQL 데이터를 담은 Compose 볼륨과 임시 키·닉네임 사전 파일, 임시 디렉터리 경로를 기록한 상태 파일을 삭제합니다. 빌드한 Docker 이미지는 유지됩니다.
+`cleanup-demo.sh`는 데모용 Docker Compose 컨테이너를 중지하고 제거하며, PostgreSQL 데이터를 담은 Compose 볼륨과 데모에서 빌드한 Docker 이미지도 삭제합니다. 복제한 프론트 소스, 임시 키·닉네임 사전 파일도 삭제합니다. 임시 디렉터리 경로는 `script/.demo-temp-dir`, 이미지 이름은 `script/.demo-docker-image`에 각각 기록되며 두 상태 파일도 정리합니다.
