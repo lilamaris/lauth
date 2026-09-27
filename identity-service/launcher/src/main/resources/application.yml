@@ -33,7 +33,7 @@ lauth:
       - /v3/api-docs
 
 server:
-  port: ${PORT:8081}
+  port: ${PORT:8090}
 
 spring:
   application:
@@ -112,6 +112,9 @@ management:
   tracing:
     sampling:
       probability: 0.1
+    export:
+      otlp:
+        enabled: ${OTLP_ENABLED:false}
   otlp:
     metrics:
       export:

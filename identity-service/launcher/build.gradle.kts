@@ -1,3 +1,5 @@
+import org.springframework.boot.gradle.tasks.bundling.BootJar
+
 plugins {
     id("module.spring")
     id("observability.spring")
@@ -15,4 +17,8 @@ dependencies {
 
     implementation(libs.spring.boot.starter.flyway)
     implementation(libs.flyway.database.postgresql)
+}
+
+tasks.named<BootJar>("bootJar") {
+    archiveFileName.set("app.jar")
 }

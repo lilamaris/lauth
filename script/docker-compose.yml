@@ -1,0 +1,78 @@
+services:
+  lauth:
+    image: ${LAUTH_REGISTRY_HOST}/${LAUTH_IMAGE_NAMESPACE:-lauth}/identity-service/launcher:${LAUTH_IMAGE_TAG:-local}
+    environment:
+      LAUTH_HASHER_KEY: ${LAUTH_HASHER_KEY:-0123456789abcdef0123456789abcdef}
+      DB_URL: jdbc:postgresql://postgres:5432/lauth
+      DB_USERNAME: lauth
+      DB_PASSWORD: ${LAUTH_POSTGRES_PASSWORD:-experience-only-db-password}
+      LAUTH_SESSION_EXPIRATION: ${LAUTH_SESSION_EXPIRATION:-P7D}
+      LAUTH_SESSION_ACCESS_TOKEN_ISSUER: ${LAUTH_SESSION_ACCESS_TOKEN_ISSUER:-lauth}
+      LAUTH_SESSION_ACCESS_TOKEN_EXPIRATION: ${LAUTH_SESSION_ACCESS_TOKEN_EXPIRATION:-PT5M}
+      LAUTH_SESSION_REFRESH_TOKEN_EXPIRATION: ${LAUTH_SESSION_REFRESH_TOKEN_EXPIRATION:-P7D}
+      LAUTH_DISPLAYNAME_ADJECTIVE_SOURCE: /opt/lauth/data/adjectives
+      LAUTH_DISPLAYNAME_NOUN_SOURCE: /opt/lauth/data/nouns
+      LAUTH_JWKS_ACTIVE_KID: local
+      LAUTH_JWKS_KEY_SOURCE: /opt/lauth/secrets
+      LAUTH_SYNC_SCOPE_DEFINITION: "true"
+      SPRING_MAIL_PASSWORD: ""
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
+      SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
+      OAUTH2_GITHUB_CLIENT_ID: local-demo
+      OAUTH2_GITHUB_CLIENT_SECRET: local-demo
+      OAUTH2_GOOGLE_CLIENT_ID: local-demo
+      OAUTH2_GOOGLE_CLIENT_SECRET: local-demo
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8090:8090"
+      # The client shares lauth's network namespace, so its port is published here.
+      - "127.0.0.1:5174:5174"
+    volumes:
+      - type: bind
+        source: ${LAUTH_KEYS_DIR:?run-demo.sh must provide a temporary key directory}
+        target: /opt/lauth/secrets
+        read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${LAUTH_DATA_DIR:?run-demo.sh must provide a temporary data directory}
+        target: /opt/lauth/data
+        read_only: true
+        bind:
+          create_host_path: false
+
+  client:
+    image: ${LAUTH_REGISTRY_HOST}/${LAUTH_IMAGE_NAMESPACE:-lauth}/client:${LAUTH_CLIENT_IMAGE_TAG:-local}
+    network_mode: service:lauth
+    depends_on:
+      lauth:
+        condition: service_started
+    environment:
+      HOST: 0.0.0.0
+      PORT: "5174"
+      ORIGIN: http://localhost:5174
+      LAUTH_ISSUER: http://localhost:8090
+      LAUTH_CLIENT_ID: oidc-client
+      LAUTH_CLIENT_SECRET: secret
+      LAUTH_REDIRECT_URI: http://localhost:5174/auth/callback
+      LAUTH_ALLOW_INSECURE_HTTP: "true"
+
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_DB: lauth
+      POSTGRES_USER: lauth
+      POSTGRES_PASSWORD: ${LAUTH_POSTGRES_PASSWORD:-experience-only-db-password}
+    volumes:
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 5s
+      timeout: 5s
+      start_period: 10s
+      retries: 12
+
+volumes:
+  postgres-data:
