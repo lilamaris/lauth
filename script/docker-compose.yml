@@ -27,6 +27,8 @@ services:
         condition: service_healthy
     ports:
       - "127.0.0.1:8090:8090"
+      # The client shares lauth's network namespace, so its port is published here.
+      - "127.0.0.1:5174:5174"
     volumes:
       - type: bind
         source: ${LAUTH_KEYS_DIR:?run-demo.sh must provide a temporary key directory}
@@ -40,6 +42,22 @@ services:
         read_only: true
         bind:
           create_host_path: false
+
+  client:
+    image: ${LAUTH_REGISTRY_HOST}/${LAUTH_IMAGE_NAMESPACE:-lauth}/client:${LAUTH_CLIENT_IMAGE_TAG:-local}
+    network_mode: service:lauth
+    depends_on:
+      lauth:
+        condition: service_started
+    environment:
+      HOST: 0.0.0.0
+      PORT: "5174"
+      ORIGIN: http://localhost:5174
+      LAUTH_ISSUER: http://localhost:8090
+      LAUTH_CLIENT_ID: oidc-client
+      LAUTH_CLIENT_SECRET: secret
+      LAUTH_REDIRECT_URI: http://localhost:5174/auth/callback
+      LAUTH_ALLOW_INSECURE_HTTP: "true"
 
   postgres:
     image: postgres:18-alpine
