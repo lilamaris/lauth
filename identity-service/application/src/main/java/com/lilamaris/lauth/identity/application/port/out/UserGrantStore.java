@@ -6,4 +6,6 @@ import java.util.UUID;
 
 public interface UserGrantStore {
     boolean grantAll(UUID userId, Set<UUID> scopeIds, Instant createdAt);
+
+    void grantIfAbsent(UUID userId, Set<UUID> scopeIds, Instant createdAt);
 }

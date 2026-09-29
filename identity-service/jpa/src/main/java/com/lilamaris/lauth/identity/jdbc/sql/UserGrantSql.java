@@ -13,6 +13,8 @@ public class UserGrantSql {
             )
             """;
 
+    public final static String INSERT_USER_GRANT_IF_ABSENT = INSERT_USER_GRANT + " ON CONFLICT DO NOTHING";
+
     public final static String FIND_GRANT_FROM_USER_ID = """
             SELECT
                 s.resource AS resource,

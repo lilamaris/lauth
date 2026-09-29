@@ -48,6 +48,15 @@ public class UserJdbcAdapter implements UserStore, UserPrincipalReader, UserMeta
     }
 
     @Override
+    public void saveIfAbsent(User user) {
+        try {
+            save(user);
+        } catch (DuplicateKeyException exception) {
+            if (findPrincipalById(user.getId()).isEmpty()) throw exception;
+        }
+    }
+
+    @Override
     public UpdateHandleStatus updateHandle(UUID userId, String handle, Instant updatedAt) {
         var sql = UserSql.UPDATE_HANDLE;
         try {

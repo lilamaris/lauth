@@ -46,6 +46,17 @@ public class UserUserGrantJdbcAdapter implements UserGrantStore, UserGrantReader
     }
 
     @Override
+    public void grantIfAbsent(UUID userId, Set<UUID> scopeIds, Instant createdAt) {
+        var args = scopeIds.stream()
+                .map(scopeId -> new MapSqlParameterSource()
+                        .addValue("userId", userId)
+                        .addValue("scopeId", scopeId)
+                        .addValue("createdAt", Timestamp.from(createdAt)))
+                .toArray(SqlParameterSource[]::new);
+        jdbcTemplate.batchUpdate(UserGrantSql.INSERT_USER_GRANT_IF_ABSENT, args);
+    }
+
+    @Override
     public Set<ResourceScope> findByUserId(UUID userId) {
         var sql = UserGrantSql.FIND_GRANT_FROM_USER_ID;
         return jdbcClient.sql(sql)
@@ -57,4 +68,3 @@ public class UserUserGrantJdbcAdapter implements UserGrantStore, UserGrantReader
                 .collect(Collectors.toUnmodifiableSet());
     }
 }
-

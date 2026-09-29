@@ -5,10 +5,12 @@ import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.NullMarked;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @NullMarked
 @Component
+@Order(0)
 @RequiredArgsConstructor
 public class ApplicationInitializer implements ApplicationRunner {
     private final ScopeInitializer scopeInitializer;
