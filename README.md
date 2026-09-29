@@ -119,6 +119,32 @@ Refresh Token, 비밀번호 재설정 토큰 등 일종의 일회성 Credential�
 
 ## Run the Service
 
+### k6 테스트 사용자
+
+Identity Service에 `LAUTH_TEST_ENABLED=true`, `LAUTH_TEST_USER_COUNT=1000`,
+`LAUTH_TEST_IDS_FILE=/opt/lauth/test/user-ids.txt`, `LAUTH_TEST_CLIENT_SECRET=<별도 비밀값>`을 설정하면
+시작 과정에서 테스트 사용자를 시딩합니다. `user.read`와 `user.write` 스코프가 DB에 있어야 하므로
+`LAUTH_SYNC_SCOPE_DEFINITION=true`도 설정하세요. 동일한 DB로 재시작해도 사용자 ID와 권한은 재사용하고,
+ID 파일은 최신 사용자 목록으로 갱신합니다. 파일은 한 줄에 UUID 하나씩 기록됩니다.
+
+Docker에서 다른 프로젝트가 ID 파일을 읽으려면 `/opt/lauth/test` 디렉터리를 호스트나 공유 볼륨에
+쓰기 가능하게 마운트하고, 읽는 쪽에도 같은 볼륨을 마운트하세요. 테스트 플래그를 끄면 시딩과
+테스트 클라이언트 및 grant가 등록되지 않습니다.
+
+시딩된 ID로 토큰을 발급하려면 다음 요청을 사용합니다.
+
+```bash
+curl -u "test-client:${LAUTH_TEST_CLIENT_SECRET}" \
+  -d 'grant_type=urn:lauth:grant-type:test' \
+  -d "user_id=$(head -n 1 /path/to/shared/user-ids.txt)" \
+  http://localhost:8090/oauth2/token
+```
+
+OAuth2 Authorization Server가 액세스 토큰과 리프레시 토큰을 발급하고 DB에 발급 기록을 저장합니다.
+`grant_type=refresh_token`으로 갱신할 수 있습니다. 이 토큰 엔드포인트는 브라우저 HTTP 세션을
+생성하지 않습니다.
+
+
 저장소 루트에서 아래 명령을 실행하면 Identity Service, PostgreSQL, [lauth-client](https://github.com/lilamaris/lauth-client)를 시작합니다.
 프론트는 `http://localhost:5174`, Identity Service는 `http://localhost:8090`에서 접근할 수 있습니다.
 
