@@ -12,7 +12,9 @@ generated_output=""
 paths=()
 images=()
 if [[ -f "$state_file" ]]; then
-  mapfile -t paths < "$state_file"
+  while IFS= read -r path || [[ -n "$path" ]]; do
+    paths+=("$path")
+  done < "$TMP_FILE_STATE"
   temp_dir="${paths[0]:-}"
   generated_output="${paths[1]:-}"
   if [[ "$temp_dir" != /*/lauth-api-demo.* || "$temp_dir" == *$'\n'* ]]; then

@@ -21,6 +21,16 @@ usage() {
   printf 'Usage: bash script/run-demo.sh [-o|--generated-output DIRECTORY]\n'
 }
 
+resolve_generated_output() {
+  local parent name
+  parent="$(dirname -- "$1")"
+  name="$(basename -- "$1")"
+  [[ "$name" != . && "$name" != .. ]] || fail "Invalid generated output directory: $1"
+  [[ -d "$parent" ]] || fail "Generated output parent directory does not exists: $parent"
+  parent="$(cd -P -- "$parent" && pwd -P)"
+  printf '%s/%s\n' "${parent%/}" "$name"
+}
+
 while (( $# > 0 )) ; do
   case "$1" in
       -\?|--help|-h)
@@ -51,7 +61,7 @@ fi
 
 temp_dir="$(realpath -m -- "$(mktemp -d "${TMPDIR:-/tmp}/lauth-api-demo.XXXXXXXX")")"
 GENERATED_OUTPUT="${GENERATED_OUTPUT:-${temp_dir}/generated}"
-GENERATED_OUTPUT="$(realpath -m -- "$GENERATED_OUTPUT")"
+GENERATED_OUTPUT="$(resolve_generated_output "$GENERATED_OUTPUT")"
 if [[ "$GENERATED_OUTPUT" == / || "$PROJECT_ROOT" == "$GENERATED_OUTPUT" || "$PROJECT_ROOT" == "$GENERATED_OUTPUT/"* || "$temp_dir" == "$GENERATED_OUTPUT/"* || "${HOME:-/}" == "$GENERATED_OUTPUT" || "${HOME:-/}" == "$GENERATED_OUTPUT/"* ]]; then
   fail "Generated output must be a dedicated directory: $GENERATED_OUTPUT"
 fi
