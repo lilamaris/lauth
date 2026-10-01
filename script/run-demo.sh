@@ -103,7 +103,7 @@ printf '%s\n' "$client_image" >> "$image_state_file"
 compose_project="lilamaris-lauth-api-demo"
 compose=(docker compose -p "$compose_project" -f "${script_root}/docker-compose.yml" )
 
-mkdir -p "$temp_dir/data" "$temp_dir/secrets"
+mkdir -p "$temp_dir/data" "$temp_dir/secrets" "$temp_dir/generated"
 cp script/data/adjectives script/data/nouns "$temp_dir/data/"
 bash script/key-gen.sh --kid local "$temp_dir/secrets"
 
@@ -111,9 +111,9 @@ export LAUTH_REGISTRY_HOST="$registry_host"
 export LAUTH_IMAGE_NAMESPACE="$namespace"
 export LAUTH_IMAGE_TAG="$tag"
 export LAUTH_CLIENT_IMAGE_TAG="$client_tag"
-export LAUTH_KEYS_DIR="$temp_dir/secrets"
-export LAUTH_DATA_DIR="$temp_dir/data"
+export LAUTH_BIND_DIR="$temp_dir"
 export LAUTH_HASHER_KEY="${LAUTH_HASHER_KEY:-$(openssl rand -hex 32)}"
+export LAUTH_TEST_ENABLED=true
 
 log_info "Starting the demo stack. Run bash script/cleanup-demo.sh to stop and clean up."
 
@@ -130,6 +130,6 @@ printf '  %s\n' "$client_image"
 log_info "Created temporary files:"
 printf '  %s\n' "$state_file" "$image_state_file"
 printf '  %s\n' "$temp_dir/client"
-find "$temp_dir/data" "$temp_dir/secrets" -type f -print | sort | while IFS= read -r file; do
+find "$temp_dir/data" "$temp_dir/secrets" "$temp_dir/generated" -type f -print | sort | while IFS= read -r file; do
   printf '  %s\n' "$file"
 done

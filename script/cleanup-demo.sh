@@ -33,8 +33,7 @@ for image in "${images[@]}"; do
 done
 
 export LAUTH_REGISTRY_HOST=localhost
-export LAUTH_KEYS_DIR="${temp_dir:-/tmp/lauth-api-demo-missing}/secrets"
-export LAUTH_DATA_DIR="${temp_dir:-/tmp/lauth-api-demo-missing}/data"
+export LAUTH_BIND_DIR="${temp_dir:-/tmp/lauth-api-demo-missing}"
 
 compose=(docker compose -p lilamaris-lauth-api-demo -f "${script_root}/docker-compose.yml")
 run "shutdown and cleanup" "${compose[@]}" down --volumes --remove-orphans
