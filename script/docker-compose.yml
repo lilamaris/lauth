@@ -1,6 +1,7 @@
 services:
   lauth:
     image: ${LAUTH_REGISTRY_HOST}/${LAUTH_IMAGE_NAMESPACE:-lauth}/identity-service/launcher:${LAUTH_IMAGE_TAG:-local}
+    user: "${LAUTH_HOST_UID:-0}:${LAUTH_HOST_GID:-0}"
     environment:
       LAUTH_HASHER_KEY: ${LAUTH_HASHER_KEY:-0123456789abcdef0123456789abcdef}
       DB_URL: jdbc:postgresql://postgres:5432/lauth

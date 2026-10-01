@@ -160,7 +160,7 @@ bash script/run-demo.sh
 bash script/run-demo.sh --generated-output ./demo-test-users
 ```
 
-이 경우 ID 파일은 `./demo-test-users/test-user-ids.txt`에 생성됩니다. 데모 테스트 클라이언트의 ID는 `test-client`, 비밀값은 `test-secret`입니다.
+이 경우 ID 파일은 `./demo-test-users/test-user-ids.txt`에 생성됩니다. Identity Service는 스크립트를 실행한 호스트 사용자의 UID:GID로 실행되므로, 같은 사용자가 호스트에서 파일을 읽을 수 있습니다. 데모 테스트 클라이언트의 ID는 `test-client`, 비밀값은 `test-secret`입니다.
 
 스크립트는 다음 순서로 실행합니다.
 

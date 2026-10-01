@@ -154,6 +154,8 @@ export LAUTH_IMAGE_TAG="$TAG"
 export LAUTH_CLIENT_IMAGE_TAG="$client_tag"
 export LAUTH_BIND_DIR="$temp_dir"
 export LAUTH_GENERATED_OUTPUT="$GENERATED_OUTPUT"
+export LAUTH_HOST_UID="$(id -u)"
+export LAUTH_HOST_GID="$(id -g)"
 export LAUTH_HASHER_KEY="${LAUTH_HASHER_KEY:-$(openssl rand -hex 32)}"
 export LAUTH_TEST_ENABLED=true
 
