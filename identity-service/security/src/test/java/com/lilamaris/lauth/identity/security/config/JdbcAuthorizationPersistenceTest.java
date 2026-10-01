@@ -1,6 +1,7 @@
 package com.lilamaris.lauth.identity.security.config;
 
 import com.lilamaris.lauth.identity.security.method.credential.request.CredentialAuthenticateToken;
+import com.lilamaris.lauth.identity.application.config.TestUserProperties;
 import com.lilamaris.lauth.identity.security.method.federated.resolver.OAuth2FederatedUserPrincipal;
 import com.lilamaris.lauth.identity.security.method.federated.resolver.OidcFederatedUserPrincipal;
 import com.lilamaris.lauth.identity.security.principal.SerializableUserPrincipal;
@@ -23,6 +24,7 @@ import org.springframework.security.oauth2.server.authorization.OAuth2Authorizat
 import org.springframework.security.oauth2.server.authorization.OAuth2TokenType;
 
 import java.security.Principal;
+import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
@@ -47,9 +49,10 @@ class JdbcAuthorizationPersistenceTest {
     @MethodSource("authentications")
     void refreshTokenAndPrincipalSurviveServiceAndClientRepositoryRecreation(Authentication authentication) {
         var encoder = Argon2PasswordEncoder.defaultsForSpringSecurity_v5_8();
-        var security = new GlobalSecurityConfiguration();
+        var oauth2Security = new CustomOAuth2AuthorizationServerConfiguration();
         var configuration = new CustomOAuth2AuthorizationServerConfiguration();
-        var clients = security.registeredClientRepository(encoder);
+        var properties = new TestUserProperties(false, 1000, Path.of("/tmp/test-ids"), null);
+        var clients = oauth2Security.registeredClientRepository(encoder, properties);
         var client = clients.findByClientId("oidc-client");
         assertThat(client).isNotNull();
         var issuedAt = Instant.now();
@@ -63,7 +66,7 @@ class JdbcAuthorizationPersistenceTest {
                 .build();
         configuration.oAuth2AuthorizationService(jdbc, clients).save(authorization);
 
-        var recreatedClients = security.registeredClientRepository(encoder);
+        var recreatedClients = oauth2Security.registeredClientRepository(encoder, properties);
         var recreatedService = configuration.oAuth2AuthorizationService(jdbc, recreatedClients);
         var restored = recreatedService.findByToken(refreshToken.getTokenValue(), OAuth2TokenType.REFRESH_TOKEN);
         assertThat(restored).isNotNull();

@@ -1,5 +1,10 @@
 lauth:
   timezone: Asia/Seoul
+  test:
+    enabled: ${LAUTH_TEST_ENABLED:false}
+    user-count: ${LAUTH_TEST_USER_COUNT:1000}
+    ids-file: ${LAUTH_TEST_IDS_FILE:/tmp/lauth-test-user-ids.txt}
+    client-secret: ${LAUTH_TEST_CLIENT_SECRET:}
   hasherKey: ${LAUTH_HASHER_KEY}
   session:
     expiration: ${LAUTH_SESSION_EXPIRATION}

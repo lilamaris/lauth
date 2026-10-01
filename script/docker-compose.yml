@@ -15,6 +15,9 @@ services:
       LAUTH_JWKS_ACTIVE_KID: local
       LAUTH_JWKS_KEY_SOURCE: /opt/lauth/secrets
       LAUTH_SYNC_SCOPE_DEFINITION: "true"
+      LAUTH_TEST_ENABLED: ${LAUTH_TEST_ENABLED:-false}
+      LAUTH_TEST_IDS_FILE: /opt/lauth/generated/test-user-ids.txt
+      LAUTH_TEST_CLIENT_SECRET: "test-secret"
       SPRING_MAIL_PASSWORD: ""
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "false"
       SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "false"
@@ -31,15 +34,20 @@ services:
       - "127.0.0.1:5174:5174"
     volumes:
       - type: bind
-        source: ${LAUTH_KEYS_DIR:?run-demo.sh must provide a temporary key directory}
+        source: ${LAUTH_BIND_DIR:?run-demo.sh must provide a bind point}/secrets
         target: /opt/lauth/secrets
         read_only: true
         bind:
           create_host_path: false
       - type: bind
-        source: ${LAUTH_DATA_DIR:?run-demo.sh must provide a temporary data directory}
+        source: ${LAUTH_BIND_DIR:?run-demo.sh must provide a bind point}/data
         target: /opt/lauth/data
         read_only: true
+        bind:
+          create_host_path: false
+      - type: bind
+        source: ${LAUTH_GENERATED_OUTPUT:?run-demo.sh must provide a generated bind point}
+        target: /opt/lauth/generated
         bind:
           create_host_path: false
 

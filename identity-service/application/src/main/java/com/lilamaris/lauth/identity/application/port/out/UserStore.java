@@ -4,4 +4,6 @@ import com.lilamaris.lauth.identity.domain.User;
 
 public interface UserStore {
     void save(User user);
+
+    void saveIfAbsent(User user);
 }

@@ -15,6 +15,7 @@ import com.nimbusds.jose.jwk.JWKSet;
 import com.nimbusds.jose.jwk.source.JWKSource;
 import com.nimbusds.jose.proc.SecurityContext;
 import org.bouncycastle.crypto.CryptoServicesRegistrar;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,9 +42,16 @@ import java.util.List;
         AccessTokenProperties.class,
         RefreshTokenProperties.class,
         CredentialProperties.class,
-        ClientRegistrationProperties.class
+        ClientRegistrationProperties.class,
+        TestUserProperties.class
 })
 public class ApplicationConfiguration {
+    @Bean
+    @ConditionalOnProperty(prefix = "lauth.test", name = "enabled", havingValue = "true")
+    TestUserIds testUserIds(TestUserProperties properties) {
+        return new TestUserIds(properties);
+    }
+
     @Bean
     Clock clock(ApplicationProperties properties) {
         return Clock.system(properties.timezone());
