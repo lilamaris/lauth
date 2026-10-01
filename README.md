@@ -144,6 +144,7 @@ OAuth2 Authorization Server가 액세스 토큰과 리프레시 토큰을 발급
 `grant_type=refresh_token`으로 갱신할 수 있습니다. 이 토큰 엔드포인트는 브라우저 HTTP 세션을
 생성하지 않습니다.
 
+### 데모 실행
 
 저장소 루트에서 아래 명령을 실행하면 Identity Service, PostgreSQL, [lauth-client](https://github.com/lilamaris/lauth-client)를 시작합니다.
 프론트는 `http://localhost:5174`, Identity Service는 `http://localhost:8090`에서 접근할 수 있습니다.
@@ -152,21 +153,30 @@ OAuth2 Authorization Server가 액세스 토큰과 리프레시 토큰을 발급
 bash script/run-demo.sh
 ```
 
+데모는 테스트 사용자 시딩을 켜고 기본값인 1,000명의 ID를 임시 디렉터리의 `generated/test-user-ids.txt`에 기록합니다.
+다른 위치에 ID 파일을 공유하려면 아직 존재하지 않는 전용 디렉터리를 지정하세요. 상대 경로는 저장소 루트를 기준으로 해석합니다.
+
+```bash
+bash script/run-demo.sh --generated-output ./demo-test-users
+```
+
+이 경우 ID 파일은 `./demo-test-users/test-user-ids.txt`에 생성됩니다. 데모 테스트 클라이언트의 ID는 `test-client`, 비밀값은 `test-secret`입니다.
+
 스크립트는 다음 순서로 실행합니다.
 
-1. Gradle로 `identity-service/launcher`를 빌드합니다.
-2. 호스트 아키텍처에 맞는 Docker 이미지를 만들고 로컬 엔진에 불러옵니다.
-3. 임시 디렉터리를 만들고 RSA 키와 닉네임 사전 파일을 준비합니다.
-4. 프론트 저장소를 임시 디렉터리에 복제하고 해당 저장소의 Dockerfile로 이미지를 빌드합니다. 이미지 태그에는 프론트 커밋 해시를 사용합니다.
-5. Docker Compose로 PostgreSQL, Identity Service, 프론트를 시작합니다. Identity Service는 PostgreSQL이 준비된 뒤 연결합니다.
-6. 서비스는 스크립트가 종료된 뒤에도 계속 실행됩니다. 실행이 끝나면 생성된 컨테이너, 이미지, 임시 파일 목록을 출력합니다.
+1. 기존 데모 상태가 있으면 정리하고 임시 디렉터리를 만듭니다.
+2. Gradle로 `identity-service/launcher`를 빌드하고, 호스트 아키텍처에 맞는 Docker 이미지를 로컬 엔진에 불러옵니다.
+3. 프론트 저장소를 임시 디렉터리에 복제하고 해당 저장소의 Dockerfile로 이미지를 빌드합니다. 이미지 태그에는 프론트 커밋 해시를 사용합니다.
+4. RSA 키, 닉네임 사전 파일, 생성 파일을 저장할 디렉터리를 준비합니다.
+5. Docker Compose로 PostgreSQL, Identity Service, 프론트를 시작합니다. Identity Service는 PostgreSQL이 준비된 뒤 테스트 사용자를 시딩하고 ID 파일을 기록합니다.
+6. 실행이 끝나면 생성된 컨테이너, 이미지, 상태 파일에 기록된 경로를 출력합니다. 서비스는 스크립트가 종료된 뒤에도 계속 실행됩니다.
 
 데모에서는 프론트 서버와 Identity Service가 네트워크를 공유해 모두 `localhost:8090`을 인증 서버 주소로 사용합니다. API 요청은 프론트 서버에서 보내고 브라우저의 인증 요청은 페이지 이동으로 처리하므로 별도의 CORS 설정이 필요하지 않습니다. Google과 GitHub 로그인에는 실제 OAuth 공급자 인증 정보가 필요합니다.
 
-기존 데모 상태가 있으면 `run-demo.sh`가 먼저 `cleanup-demo.sh`를 실행해 이전 환경을 정리하고 다시 시작합니다. 직접 정리하려면 아래 명령을 실행합니다.
+직접 정리하려면 아래 명령을 실행합니다.
 
 ```bash
 bash script/cleanup-demo.sh
 ```
 
-`cleanup-demo.sh`는 데모용 Docker Compose 컨테이너를 중지하고 제거하며, PostgreSQL 데이터를 담은 Compose 볼륨과 데모에서 빌드한 Docker 이미지도 삭제합니다. 복제한 프론트 소스, 임시 키·닉네임 사전 파일도 삭제합니다. 임시 디렉터리 경로는 `script/.demo-temp-dir`, 이미지 이름은 `script/.demo-docker-image`에 각각 기록되며 두 상태 파일도 정리합니다.
+`cleanup-demo.sh`는 데모용 Docker Compose 컨테이너와 PostgreSQL 볼륨, 데모에서 빌드한 Docker 이미지를 제거합니다. `script/.state.tmp`에 기록된 임시 디렉터리와 생성 파일 디렉터리도 삭제하므로 `--generated-output`에는 전용 디렉터리를 사용하세요. 이미지 이름은 `script/.state.img`에 기록되며, 정리 후 두 상태 파일도 삭제됩니다.

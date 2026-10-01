@@ -46,7 +46,7 @@ services:
         bind:
           create_host_path: false
       - type: bind
-        source: ${LAUTH_BIND_DIR:?run-demo.sh must provide a bind point}/generated
+        source: ${LAUTH_GENERATED_OUTPUT:?run-demo.sh must provide a generated bind point}
         target: /opt/lauth/generated
         bind:
           create_host_path: false
